@@ -4,5 +4,8 @@
     "internal_server_error": "Erro interno de servidor!",
     "unknown_error": "Erro desconhecido!",
     "notNull Violation": "Atributo {{field}} não pode ser nulo!",
-    "Validation error": "Falha ao validar o atributo '{{field}}'!"
+    "Validation error": "Falha ao validar o atributo '{{field}}'!",
+    "row_deleted": "Registo removido com sucesso!",
+    "invalid_delete": "Remoção do registo inválida!",
+    "invalid_update": "Alteração do registo inválida!"
 }

@@ -38,6 +38,13 @@ class ErrorResponse {
     static noDataFound() {
         return new ErrorResponse(404, 'no_data_found', undefined)
     }
+
+    static invalidDelete() {
+        return new ErrorResponse(401, 'invalid_delete', undefined)
+    }
+    static invalidUpdate() {
+        return new ErrorResponse(401, 'invalid_update', undefined)
+    }
 }
 
 module.exports = ErrorResponse
