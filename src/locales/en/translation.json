@@ -1,4 +1,8 @@
 {
     "bad_request": "Bad request!",
-    "no_data_found": "No data found!"
+    "no_data_found": "No data found!",
+    "internal_server_error": "Internal Server Error",
+    "unknown_error": "Unknown error!",
+    "notNull Violation": "Field {{field}} cannot be null!",
+    "Validation error": "Validation failure on '{{field}}' field!"
 }

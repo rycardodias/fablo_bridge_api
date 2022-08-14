@@ -1,4 +1,8 @@
 {
     "bad_request": "Falha no pedido!",
-    "no_data_found": "Não existem dados!"
+    "no_data_found": "Não existem dados!",
+    "internal_server_error": "Erro interno de servidor!",
+    "unknown_error": "Erro desconhecido!",
+    "notNull Violation": "Atributo {{field}} não pode ser nulo!",
+    "Validation error": "Falha ao validar o atributo '{{field}}'!"
 }

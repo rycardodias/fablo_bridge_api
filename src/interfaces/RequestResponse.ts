@@ -1,4 +1,4 @@
 export default interface RequestResponse {
-    status: number;
+    // status: number;
     data: object;
 }
