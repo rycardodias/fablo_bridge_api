@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { Application, Request, Response } from 'express'
 const ErrorHandler = require("./classes/ErrorHandler")
 const db = require('./config/postgresDatabase')
 const i18next = require('i18next');
@@ -28,22 +28,24 @@ i18next
         }
     })
 
-const app = express();
+const app: Application = express();
+
 app.use(express.json());
 
 app.use(middleware.handle(i18next))
 
+app.all('/', (req: Request, res: Response) => {
+    return res.send("FABLO BRIDGE API!")
+});
+
 app.use('/users', require('./routes/user'))
 
 app.all('*', (req: Request, res: Response) => {
-    return res.send('Invalid request!')
+    return res.json({ error: 'Invalid request!' })
 });
 
 app.use(ErrorHandler)
 
-app.listen(3000, () => {
-    // console.info(`App listening on port ${3000}`)
-})
-
+export default app;
 
 
