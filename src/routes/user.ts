@@ -31,8 +31,8 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 router.post('/insert',
     [
         body("email").isEmail(),
-        body('password').isLength({ min: 5 }), 
-    ], BodyValidator,
+        body('password').isLength({ min: 5 }),
+    ],
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { email, password, name } = req.body
