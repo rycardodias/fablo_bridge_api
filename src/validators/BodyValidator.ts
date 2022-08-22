@@ -6,11 +6,11 @@ const ErrorResponse = require('./ErrorResponse')
 function BodyValidator(req: Request, res: Response, next: NextFunction) {
 
     const errors = validationResult(req);
-    
+
     if (!errors.isEmpty()) {
-        return next(ErrorResponse.badRequest(errors.array()))
+        return next(ErrorResponse.badRequestBodyValidator(errors.array()))
     }
-    
+
     next()
 
 }

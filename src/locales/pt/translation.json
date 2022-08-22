@@ -6,7 +6,10 @@
     "unknown_error": "Erro desconhecido!",
     "notNull Violation": "Atributo {{field}} não pode ser nulo!",
     "Validation error": "Falha ao validar o atributo '{{field}}'!",
+    "Invalid value": "Atributo '{{field}}' inválido!",
     "row_deleted": "Registo removido com sucesso!",
     "invalid_delete": "Remoção do registo inválida!",
-    "invalid_update": "Alteração do registo inválida!"
+    "invalid_update": "Alteração do registo inválida!",
+    "user_authenticated": "Utilizador autenticado com sucesso!",
+    "user_created": "Utilizador registado com sucesso!"
 }

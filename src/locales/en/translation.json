@@ -6,7 +6,10 @@
     "unknown_error": "Unknown error!",
     "notNull Violation": "Field {{field}} cannot be null!",
     "Validation error": "Validation failure on '{{field}}' field!",
+    "Invalid value": "Invalid value on '{{field}}' field!",
     "row_deleted": "Row deleted successfully!",
     "invalid_delete": "Invalid Delete!",
-    "invalid_update": "Invalid Update!"
+    "invalid_update": "Invalid Update!",
+    "user_authenticated": "User authenticated successfully!",
+    "user_created": "User created successfully!"
 }

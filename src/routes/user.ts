@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { body, validationResult } from 'express-validator';
 import RequestResponse from '../interfaces/RequestResponse'
+import BodyValidator from "../validators/BodyValidator";
 const ErrorResponse = require('../validators/ErrorResponse')
 const router = express.Router();
 const Model = require('../models/User')
@@ -32,7 +33,7 @@ router.get('/', isAuthenticated, async (req: Request, res: Response, next: NextF
 
 router.post('/insert', [
     body("email").isEmail(),
-    body('password').isLength({ min: 5 }),
+    body('password').isLength({ min: 5 }), BodyValidator,
 ], async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password, name } = req.body
@@ -45,18 +46,23 @@ router.post('/insert', [
             name: name,
         })
 
+        req.session.user = {
+            id: request.id,
+        }
+
         response = {
-            data: request,
+            data: req.t("user_created"),
         }
 
         return res.status(201).json(response)
 
     } catch (error: any) {
+        console.log(error.errors)
         return next(ErrorResponse.badRequest(error.errors))
     }
 });
 
-router.put('/update', async (req: Request, res: Response, next: NextFunction) => {
+router.put('/update', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password, name } = req.body
 
@@ -80,7 +86,7 @@ router.put('/update', async (req: Request, res: Response, next: NextFunction) =>
     }
 });
 
-router.delete('/delete', async (req: Request, res: Response, next: NextFunction) => {
+router.delete('/delete', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body
 
@@ -105,7 +111,7 @@ router.delete('/delete', async (req: Request, res: Response, next: NextFunction)
 
 router.post('/login', [
     body("email").isEmail(),
-    body('password').isLength({ min: 5 }),
+    body('password').isLength({ min: 6 }),
 ], async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body
@@ -113,15 +119,13 @@ router.post('/login', [
         const request = await Model.findOne({ where: { email: email } })
 
         if (await bcrypt.compareSync(password, request.password)) {
-            //guardar os dados
-            console.log("é igual")
             req.session.user = {
                 id: request.id,
             }
         }
 
         response = {
-            data: request,
+            data: req.t("user_authenticated"),
         }
 
         return res.status(200).json(response)

@@ -31,6 +31,26 @@ class ErrorResponse {
         return new ErrorResponse(400, 'bad_request', errorArray)
     }
 
+    static badRequestBodyValidator(error: any) {
+        if (!error) return new ErrorResponse(400, "bad_request", undefined)
+
+        let errorArray: Array<any> = [];
+
+        for (const element of error) {
+            switch (element.msg) {
+                case 'Invalid value':
+                    errorArray.push({ type: element.msg, field: element.param })
+                    break;
+                default:
+                    errorArray.push({ type: 'unknown_error', field: element.path })
+                    break;
+            }
+        }
+
+        return new ErrorResponse(400, 'bad_request', errorArray)
+
+    }
+
     static invalidDelete() {
         return new ErrorResponse(401, 'invalid_delete', undefined)
     }
