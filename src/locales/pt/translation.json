@@ -1,5 +1,6 @@
 {
     "bad_request": "Falha no pedido!",
+    "forbidden": "Acesso Proibido!",
     "no_data_found": "Não existem dados!",
     "internal_server_error": "Erro interno de servidor!",
     "unknown_error": "Erro desconhecido!",

@@ -1,14 +1,16 @@
 import express, { Request, Response, NextFunction } from "express";
 import { body, validationResult } from 'express-validator';
 import RequestResponse from '../interfaces/RequestResponse'
-const ErrorResponse = require('../classes/ErrorResponse')
+const ErrorResponse = require('../validators/ErrorResponse')
 const router = express.Router();
 const Model = require('../models/User')
-import BodyValidator from '../classes/BodyValidator'
+const bcrypt = require('bcrypt');
+const isAuthenticated = require('../validators/isAuthenticated')
 
 let response: RequestResponse;
 
-router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+
+router.get('/', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = await Model.findAll({ exclude: ['password'] })
 
@@ -28,31 +30,31 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
     }
 });
 
-router.post('/insert',
-    [
-        body("email").isEmail(),
-        body('password').isLength({ min: 5 }),
-    ],
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { email, password, name } = req.body
+router.post('/insert', [
+    body("email").isEmail(),
+    body('password').isLength({ min: 5 }),
+], async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { email, password, name } = req.body
 
-            const request = await Model.create({
-                email: email,
-                password: password,
-                name: name,
-            })
+        const hashPassword = await bcrypt.hashSync(password, 10);
 
-            response = {
-                data: request,
-            }
+        const request = await Model.create({
+            email: email,
+            password: hashPassword,
+            name: name,
+        })
 
-            return res.status(201).json({ data: response })
-
-        } catch (error: any) {
-            return next(ErrorResponse.badRequest(error.errors))
+        response = {
+            data: request,
         }
-    });
+
+        return res.status(201).json(response)
+
+    } catch (error: any) {
+        return next(ErrorResponse.badRequest(error.errors))
+    }
+});
 
 router.put('/update', async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -96,6 +98,34 @@ router.delete('/delete', async (req: Request, res: Response, next: NextFunction)
         }
 
         return res.status(201).json(response)
+    } catch (error: any) {
+        return next(ErrorResponse.badRequest(error.errors))
+    }
+});
+
+router.post('/login', [
+    body("email").isEmail(),
+    body('password').isLength({ min: 5 }),
+], async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { email, password } = req.body
+
+        const request = await Model.findOne({ where: { email: email } })
+
+        if (await bcrypt.compareSync(password, request.password)) {
+            //guardar os dados
+            console.log("é igual")
+            req.session.user = {
+                id: request.id,
+            }
+        }
+
+        response = {
+            data: request,
+        }
+
+        return res.status(200).json(response)
+
     } catch (error: any) {
         return next(ErrorResponse.badRequest(error.errors))
     }

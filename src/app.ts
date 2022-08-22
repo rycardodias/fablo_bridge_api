@@ -1,8 +1,10 @@
 import express, { Application, Request, Response } from 'express'
-const ErrorHandler = require("./classes/ErrorHandler")
+const ErrorHandler = require("./validators/ErrorHandler")
 const db = require('./config/postgresDatabase')
 const i18next = require('i18next');
 const middleware = require('i18next-http-middleware')
+const session = require('express-session')
+const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 // db.authenticate()
 //     .then(() => {
@@ -33,6 +35,24 @@ const app: Application = express();
 app.use(express.json());
 
 app.use(middleware.handle(i18next))
+
+const sessionStore = new SequelizeStore({
+    db: db,
+    checkExpirationInterval: 15 * 60 * 1000,
+    expiration: 7 * 24 * 60 * 60 * 1000
+})
+
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'secret',
+    resave: false,
+    saveUninitialized: true,
+    store: sessionStore,
+    cookie: {
+        maxAge: 60 * 60 * 24 * 1000
+    }
+}))
+
+sessionStore.sync()
 
 app.all('/', (req: Request, res: Response) => {
     return res.send("FABLO BRIDGE API!")

@@ -1,5 +1,6 @@
 {
     "bad_request": "Bad request!",
+    "forbidden": "Forbidden!",
     "no_data_found": "No data found!",
     "internal_server_error": "Internal Server Error",
     "unknown_error": "Unknown error!",

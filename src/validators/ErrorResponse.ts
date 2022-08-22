@@ -31,19 +31,23 @@ class ErrorResponse {
         return new ErrorResponse(400, 'bad_request', errorArray)
     }
 
-    static internal() {
-        return new ErrorResponse(500, "internal_server_error", undefined)
+    static invalidDelete() {
+        return new ErrorResponse(401, 'invalid_delete', undefined)
+    }
+    static invalidUpdate() {
+        return new ErrorResponse(401, 'invalid_update', undefined)
+    }
+
+    static forbidden() {
+        return new ErrorResponse(403, 'forbidden', undefined)
     }
 
     static noDataFound() {
         return new ErrorResponse(404, 'no_data_found', undefined)
     }
 
-    static invalidDelete() {
-        return new ErrorResponse(401, 'invalid_delete', undefined)
-    }
-    static invalidUpdate() {
-        return new ErrorResponse(401, 'invalid_update', undefined)
+    static internal() {
+        return new ErrorResponse(500, "internal_server_error", undefined)
     }
 }
 
