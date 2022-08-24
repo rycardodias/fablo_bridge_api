@@ -23,7 +23,6 @@ router.get('/', isAuthenticated, async (req: Request, res: Response, next: NextF
             data: request,
         }
 
-
         return res.status(200).json(response)
 
     } catch (error) {
@@ -33,7 +32,9 @@ router.get('/', isAuthenticated, async (req: Request, res: Response, next: NextF
 
 router.post('/insert', [
     body("email").isEmail(),
-    body('password').isLength({ min: 5 }), BodyValidator,
+    body('password').isLength({ min: 5 }),
+    body('name').exists(),
+    BodyValidator,
 ], async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password, name } = req.body
@@ -57,7 +58,6 @@ router.post('/insert', [
         return res.status(201).json(response)
 
     } catch (error: any) {
-        console.log(error.errors)
         return next(ErrorResponse.badRequest(error.errors))
     }
 });
