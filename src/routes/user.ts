@@ -11,7 +11,7 @@ const isAuthenticated = require('../validators/isAuthenticated')
 let response: RequestResponse;
 
 
-router.get('/', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
+router.get('/', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const request = await Model.findAll({ exclude: ['password'] })
 
@@ -121,6 +121,7 @@ router.post('/login', [
         if (await bcrypt.compareSync(password, request.password)) {
             req.session.user = {
                 id: request.id,
+                permission: "MANAGER"
             }
         }
 
