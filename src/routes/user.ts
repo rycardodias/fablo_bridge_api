@@ -8,10 +8,7 @@ const Model = require('../models/User')
 const bcrypt = require('bcrypt');
 const isAuthenticated = require('../validators/isAuthenticated')
 
-let response: RequestResponse;
-
-
-router.get('/', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
+router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const request = await Model.findAll({ exclude: ['password'] })
 
@@ -19,11 +16,7 @@ router.get('/', isAuthenticated(), async (req: Request, res: Response, next: Nex
             return next(ErrorResponse.noDataFound())
         }
 
-        response = {
-            data: request,
-        }
-
-        return res.status(200).json(response)
+        return res.status(200).json({ data: request })
 
     } catch (error) {
         return next(ErrorResponse.badRequest())
@@ -51,11 +44,7 @@ router.post('/insert', [
             id: request.id,
         }
 
-        response = {
-            data: req.t("user_created"),
-        }
-
-        return res.status(201).json(response)
+        return res.status(201).json({ data: req.t("user_created") })
 
     } catch (error: any) {
         return next(ErrorResponse.badRequest(error.errors))
@@ -76,11 +65,7 @@ router.put('/update', isAuthenticated, async (req: Request, res: Response, next:
 
         if (request[0] === 0) return next(ErrorResponse.invalidUpdate())
 
-        response = {
-            data: request[1],
-        }
-
-        return res.status(201).json(response)
+        return res.status(201).json({ data: request[1] })
     } catch (error: any) {
         return next(ErrorResponse.badRequest(error.errors))
     }
@@ -99,11 +84,7 @@ router.delete('/delete', isAuthenticated, async (req: Request, res: Response, ne
 
         if (request === 0) return next(ErrorResponse.invalidDelete())
 
-        response = {
-            data: req.t("row_deleted"),
-        }
-
-        return res.status(201).json(response)
+        return res.status(201).json({data: req.t("row_deleted")})
     } catch (error: any) {
         return next(ErrorResponse.badRequest(error.errors))
     }
@@ -125,11 +106,7 @@ router.post('/login', [
             }
         }
 
-        response = {
-            data: req.t("user_authenticated"),
-        }
-
-        return res.status(200).json(response)
+        return res.status(200).json({data: req.t("user_authenticated")})
 
     } catch (error: any) {
         return next(ErrorResponse.badRequest(error.errors))

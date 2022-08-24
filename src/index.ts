@@ -1,5 +1,7 @@
 import app from './app';
 
-app.listen(process.env.PORT || 3000, () => {
-    console.info(`App listening on port http://localhost:${3000}`)
+const PORT = process.env.PORT || 3000
+
+app.listen(PORT, () => {
+    console.info(`App listening on port http://localhost:${PORT}`)
 })
