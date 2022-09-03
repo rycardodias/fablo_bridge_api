@@ -16,14 +16,17 @@ class ErrorResponse {
             case "notNull Violation":
                 objectResponse = { translationName: "SequelizeValidationErrorItem_validation_error_not_empty", field: info.path }
                 break;
+
             case "string violation":
                 break;
+
             case "unique violation":
                 objectResponse = {
                     translationName: "SequelizeValidationErrorItem_must_be_unique", field: info.path
                 }
                 break;
-            case "Validation error": {
+
+            case "Validation error":
                 switch (info.validatorKey) {
                     case "notEmpty":
                         objectResponse = { translationName: "SequelizeValidationErrorItem_validation_error_not_empty", field: info.path }
@@ -32,9 +35,8 @@ class ErrorResponse {
                         objectResponse = { translationName: "SequelizeValidationErrorItem_validation_error_is_numeric", field: info.path }
                         break;
                 }
-
                 break;
-            }
+
             default:
                 return new ErrorResponse(400, "bad_request", undefined)
         }
@@ -44,7 +46,7 @@ class ErrorResponse {
 
     static badRequest(error: any) {
         if (!error) return new ErrorResponse(400, "bad_request", undefined)
-
+console.log(error)
         switch (error.name) {
             case "SequelizeUniqueConstraintError": {
                 const info = error.errors[0]
@@ -64,40 +66,40 @@ class ErrorResponse {
         }
 
 
-        if (!error.errors) {
-            let message = error.original.message
+        // if (!error.errors) {
+        //     let message = error.original.message
 
-            let type = message.trim().split(':')[0].split(" ")
-            let msgError = message.split(':')[0].replace(type[type.length - 1], " ").trim()
-            let field = message.split(':')[1].replaceAll('"', '').trim()
+        //     let type = message.trim().split(':')[0].split(" ")
+        //     let msgError = message.split(':')[0].replace(type[type.length - 1], " ").trim()
+        //     let field = message.split(':')[1].replaceAll('"', '').trim()
 
-            switch (msgError) {
-                case 'invalid input syntax for type':
-                    return new ErrorResponse(400, "bad_request", [{ translationName: "invalid_input_syntax", type: type[type.length - 1], value: field }])
-                default:
-                    return new ErrorResponse(400, "bad_request", undefined)
-            }
+        //     switch (msgError) {
+        //         case 'invalid input syntax for type':
+        //             return new ErrorResponse(400, "bad_request", [{ translationName: "invalid_input_syntax", type: type[type.length - 1], value: field }])
+        //         default:
+        //             return new ErrorResponse(400, "bad_request", undefined)
+        //     }
 
-        }
+        // }
 
-        let errorArray: Array<any> = [];
+        // let errorArray: Array<any> = [];
 
-        for (const element of error.errors) {
+        // for (const element of error.errors) {
 
-            switch (element.type) {
-                case 'notNull Violation':
-                    errorArray.push({ translationName: element.type, field: element.path })
-                    break;
-                case 'Validation error':
-                    errorArray.push({ translationName: element.type, field: element.path })
-                    break;
-                default:
-                    errorArray.push({ translationName: 'unknown_error', field: element.path })
-                    break;
-            }
-        }
+        //     switch (element.type) {
+        //         case 'notNull Violation':
+        //             errorArray.push({ translationName: element.type, field: element.path })
+        //             break;
+        //         case 'Validation error':
+        //             errorArray.push({ translationName: element.type, field: element.path })
+        //             break;
+        //         default:
+        //             errorArray.push({ translationName: 'unknown_error', field: element.path })
+        //             break;
+        //     }
+        // }
 
-        return new ErrorResponse(400, 'bad_request', errorArray)
+        // return new ErrorResponse(400, 'bad_request', errorArray)
     }
 
     static badRequestBodyValidator(error: any) {
@@ -117,7 +119,6 @@ class ErrorResponse {
         }
 
         return new ErrorResponse(400, 'bad_request', errorArray)
-
     }
 
     static invalidDelete() {

@@ -23,12 +23,7 @@ router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestRes
     }
 });
 
-router.post('/insert', [
-    body("email").isEmail(),
-    body('password').isLength({ min: 5 }),
-    body('name').exists(),
-    BodyValidator,
-], async (req: Request, res: Response, next: NextFunction) => {
+router.post('/insert', async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password, name } = req.body
 
@@ -47,29 +42,27 @@ router.post('/insert', [
         return res.status(201).json({ data: req.t("user_created") })
 
     } catch (error: any) {
-        return next(ErrorResponse.badRequest(error.errors))
+        return next(ErrorResponse.badRequest(error))
     }
 });
 
 router.put('/update', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password, name, permission } = req.body
-        
+
         const request = 0 || await Model.update({
             name: name,
             permission: permission
         }, {
             where: { email: email },
             returning: true
-        },
-        )
-        
+        })
 
         if (request[0] === 0) return next(ErrorResponse.invalidUpdate())
 
         return res.status(201).json({ data: request[1] })
     } catch (error: any) {
-        return next(ErrorResponse.badRequest(error.errors))
+        return next(ErrorResponse.badRequest(error))
     }
 });
 
@@ -81,38 +74,44 @@ router.delete('/delete', isAuthenticated(), async (req: Request, res: Response, 
             where: {
                 email: email,
             }
-        }
-        )
+        })
 
         if (request === 0) return next(ErrorResponse.invalidDelete())
 
-        return res.status(201).json({data: req.t("row_deleted")})
+        return res.status(201).json({ data: req.t("row_deleted") })
     } catch (error: any) {
-        return next(ErrorResponse.badRequest(error.errors))
+        return next(ErrorResponse.badRequest(error))
     }
 });
 
-router.post('/login', [
-    body("email").isEmail(),
-    body('password').isLength({ min: 6 }),
-], async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { email, password } = req.body
+router.post('/login',
+    [
+        body("email").isEmail(),
+        body('password').isLength({ min: 6 }),
+        BodyValidator
+    ],
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { email, password } = req.body
 
-        const request = await Model.findOne({ where: { email: email } })
+            const request = await Model.findOne({ where: { email: email } })
 
-        if (await bcrypt.compareSync(password, request.password)) {
-            req.session.user = {
-                id: request.id,
-                permission: request.permission
+            if (!request || !password) {
+                return next(ErrorResponse.noDataFound())
             }
+
+            if (await bcrypt.compareSync(password, request.password)) {
+                req.session.user = {
+                    id: request.id,
+                    permission: request.permission
+                }
+            }
+
+            return res.status(200).json({ data: req.t("user_authenticated") })
+
+        } catch (error: any) {
+            return next(ErrorResponse.badRequest(error))
         }
-
-        return res.status(200).json({data: req.t("user_authenticated")})
-
-    } catch (error: any) {
-        return next(ErrorResponse.badRequest(error.errors))
-    }
-});
+    });
 
 module.exports = router

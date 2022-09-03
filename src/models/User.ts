@@ -16,7 +16,7 @@ const User = db.define('User', {
                 msg: "Error! Field {email} is required!"
             },
             notNull: {
-                msg: "Error! Field {fiscalNumber} is required!"
+                msg: "Error! Field {email} is required!"
             },
             isEmail: {
                 msg: "Error! Field {email} must be an email!"
@@ -31,7 +31,7 @@ const User = db.define('User', {
                 msg: "Error! Field {password} is required!"
             },
             notNull: {
-                msg: "Error! Field {fiscalNumber} is required!"
+                msg: "Error! Field {password} is required!"
             },
         }
     },
@@ -43,7 +43,7 @@ const User = db.define('User', {
                 msg: "Error! Field {name} is required!"
             },
             notNull: {
-                msg: "Error! Field {fiscalNumber} is required!"
+                msg: "Error! Field {name} is required!"
             },
         }
     },

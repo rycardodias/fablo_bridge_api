@@ -23,12 +23,7 @@ router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestRes
     }
 });
 
-router.post('/insert', isAuthenticated(), [
-    body('legalName').exists(),
-    body('shortName').exists(),
-    body('fiscalNumber').exists(),
-    BodyValidator,
-], async (req: Request, res: Response, next: NextFunction) => {
+router.post('/insert', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { legalName, shortName, fiscalNumber, caeType } = req.body
 
@@ -42,7 +37,7 @@ router.post('/insert', isAuthenticated(), [
         return res.status(201).json({ dataa: request })
 
     } catch (error: any) {
-        
+
         return next(ErrorResponse.badRequest(error))
     }
 });
