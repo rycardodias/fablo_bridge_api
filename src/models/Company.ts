@@ -15,6 +15,9 @@ const Company = db.define('Company', {
             notEmpty: {
                 msg: "Error! Field {legalName} is required!"
             },
+            notNull: {
+                msg: "Error! Field {fiscalNumber} is required!"
+            },
         }
     },
     shortName: {
@@ -24,7 +27,10 @@ const Company = db.define('Company', {
         validate: {
             notEmpty: {
                 msg: "Error! Field {shortName} is required!"
-            }
+            },
+            notNull: {
+                msg: "Error! Field {fiscalNumber} is required!"
+            },
         }
     },
     fiscalNumber: {
@@ -32,6 +38,9 @@ const Company = db.define('Company', {
         allowNull: false,
         validate: {
             notEmpty: {
+                msg: "Error! Field {fiscalNumber} is required!"
+            },
+            notNull: {
                 msg: "Error! Field {fiscalNumber} is required!"
             },
             isNumeric: {

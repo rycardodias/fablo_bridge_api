@@ -10,9 +10,11 @@ class ErrorResponse {
     }
 
     static validationErrorItem(info: any) {
+        // console.log(info)
         let objectResponse = {}
         switch (info.type) {
-            case "notnull violation":
+            case "notNull Violation":
+                objectResponse = { translationName: "SequelizeValidationErrorItem_validation_error_not_empty", field: info.path }
                 break;
             case "string violation":
                 break;
