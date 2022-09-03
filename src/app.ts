@@ -59,6 +59,8 @@ app.all('/', (req: Request, res: Response) => {
 });
 
 app.use('/users', require('./routes/user'))
+app.use('/companies', require('./routes/company'))
+
 
 app.all('*', (req: Request, res: Response) => {
     return res.json({ error: 'Invalid request!' })

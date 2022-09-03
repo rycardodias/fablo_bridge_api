@@ -1,50 +1,47 @@
 import { DataTypes } from 'sequelize';
 const db = require('../config/postgresDatabase');
 
-const User = db.define('User', {
+const Company = db.define('Company', {
     id: {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4
     },
-    email: {
+    legalName: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
         validate: {
             notEmpty: {
-                msg: "Error! Field {email} is required!"
-            },
-            isEmail: {
-                msg: "Error! Field {email} must be an email!"
+                msg: "Error! Field {legalName} is required!"
             },
         }
     },
-    password: {
+    shortName: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         validate: {
             notEmpty: {
-                msg: "Error! Field {password} is required!"
+                msg: "Error! Field {shortName} is required!"
             }
         }
     },
-    name: {
-        type: DataTypes.STRING,
+    fiscalNumber: {
+        type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
             notEmpty: {
-                msg: "Error! Field {name} is required!"
+                msg: "Error! Field {fiscalNumber} is required!"
+            },
+            isNumeric: {
+                msg: "Error! Field {fiscalNumber} should be numeric!"
             }
         }
     },
-    permission: {
+    caeType: {
         type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: "USER"
     },
-}, {
-    // Other model options go here
 });
 
-module.exports = User
+module.exports = Company

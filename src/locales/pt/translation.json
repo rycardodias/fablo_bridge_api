@@ -11,5 +11,8 @@
     "invalid_delete": "Remoção do registo inválida!",
     "invalid_update": "Alteração do registo inválida!",
     "user_authenticated": "Utilizador autenticado com sucesso!",
-    "user_created": "Utilizador registado com sucesso!"
+    "user_created": "Utilizador registado com sucesso!",
+    "SequelizeValidationErrorItem_must_be_unique": "Atributo '{{field}}' deve ser único!",
+    "SequelizeValidationErrorItem_validation_error_not_empty": "Atributo '{{field}}' é obrigatório!",
+    "SequelizeValidationErrorItem_validation_error_is_numeric": "Atributo '{{field}}' deve ser numérico!"
 }

@@ -4,13 +4,13 @@ import RequestResponse from '../interfaces/RequestResponse'
 import BodyValidator from "../validators/BodyValidator";
 const ErrorResponse = require('../validators/ErrorResponse')
 const router = express.Router();
-const Model = require('../models/User')
+const Model = require('../models/Company')
 const bcrypt = require('bcrypt');
 const isAuthenticated = require('../validators/isAuthenticated')
 
 router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
-        const request = await Model.findAll({ exclude: ['password'] })
+        const request = await Model.findAll()
 
         if (request.length === 0) {
             return next(ErrorResponse.noDataFound())
@@ -23,53 +23,50 @@ router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestRes
     }
 });
 
-router.post('/insert', [
-    body("email").isEmail(),
-    body('password').isLength({ min: 5 }),
-    body('name').exists(),
+router.post('/insert', isAuthenticated(), [
+    body('legalName').exists(),
+    body('shortName').exists(),
+    body('fiscalNumber').exists(),
     BodyValidator,
 ], async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email, password, name } = req.body
-
-        const hashPassword = await bcrypt.hashSync(password, 10);
+        const { legalName, shortName, fiscalNumber, caeType } = req.body
 
         const request = await Model.create({
-            email: email,
-            password: hashPassword,
-            name: name,
+            legalName: legalName,
+            shortName: shortName,
+            fiscalNumber: fiscalNumber,
+            caeType: caeType
         })
 
-        req.session.user = {
-            id: request.id,
-        }
-
-        return res.status(201).json({ data: req.t("user_created") })
+        return res.status(201).json({ dataa: request })
 
     } catch (error: any) {
-        return next(ErrorResponse.badRequest(error.errors))
+        
+        return next(ErrorResponse.badRequest(error))
     }
 });
 
 router.put('/update', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email, password, name, permission } = req.body
-        
-        const request = 0 || await Model.update({
-            name: name,
-            permission: permission
+        const { id, legalName, shortName, fiscalNumber, caeType } = req.body
+
+        const request = await Model.update({
+            legalName: legalName,
+            shortName: shortName,
+            fiscalNumber: fiscalNumber,
+            caeType: caeType
         }, {
-            where: { email: email },
+            where: { id: id },
             returning: true
         },
         )
-        
 
         if (request[0] === 0) return next(ErrorResponse.invalidUpdate())
 
         return res.status(201).json({ data: request[1] })
     } catch (error: any) {
-        return next(ErrorResponse.badRequest(error.errors))
+        return next(ErrorResponse.badRequest(error))
     }
 });
 
@@ -86,33 +83,11 @@ router.delete('/delete', isAuthenticated(), async (req: Request, res: Response, 
 
         if (request === 0) return next(ErrorResponse.invalidDelete())
 
-        return res.status(201).json({data: req.t("row_deleted")})
+        return res.status(201).json({ data: req.t("row_deleted") })
     } catch (error: any) {
-        return next(ErrorResponse.badRequest(error.errors))
+        return next(ErrorResponse.badRequest(error))
     }
 });
 
-router.post('/login', [
-    body("email").isEmail(),
-    body('password').isLength({ min: 6 }),
-], async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { email, password } = req.body
-
-        const request = await Model.findOne({ where: { email: email } })
-
-        if (await bcrypt.compareSync(password, request.password)) {
-            req.session.user = {
-                id: request.id,
-                permission: request.permission
-            }
-        }
-
-        return res.status(200).json({data: req.t("user_authenticated")})
-
-    } catch (error: any) {
-        return next(ErrorResponse.badRequest(error.errors))
-    }
-});
 
 module.exports = router

@@ -9,7 +9,7 @@ function ErrorHandler(error: any, req: Request, res: Response<RequestResponse>, 
         let errorsArray = []
 
         for (const element of error.errorList) {
-            errorsArray.push(req.t(element.type, { field: element.field }))
+            errorsArray.push(req.t(element.translationName, { ...element }))
         }
 
         return res.status(error.status).json({ error: errorsArray })
