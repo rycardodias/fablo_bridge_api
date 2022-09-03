@@ -6,15 +6,16 @@ const middleware = require('i18next-http-middleware')
 const session = require('express-session')
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
-// db.authenticate()
-//     .then(() => {
-//         console.info('Connection has been established successfully.')
-//         db.sync({ alter: true })
-//             .then(() => console.log("All models were synchronized successfully."))
-//             .catch((error: any) => console.error('Unable to connect to the database:', error))
+db.authenticate()
+    .then(() => {
+        // console.clear()
+        console.info('Connection has been established successfully.')
+        db.sync({ alter: true })
+            .then(() => console.log("All models were synchronized successfully."))
+            .catch((error: any) => console.error('Unable to connect to the database:', error))
 
-//     })
-//     .catch((error: any) => console.error('Unable to connect to the database:', error))
+    })
+    .catch((error: any) => console.error('Unable to connect to the database:', error))
 
 i18next
     .use(middleware.LanguageDetector)
@@ -60,6 +61,11 @@ app.all('/', (req: Request, res: Response) => {
 
 app.use('/users', require('./routes/user'))
 app.use('/companies', require('./routes/company'))
+app.use('/companyCertifications', require('./routes/companyCertification'))
+app.use('/companyCertificationTypes', require('./routes/companyCertificationType'))
+app.use('/certifyingEntities', require('./routes/certifyingEntity'))
+
+
 
 
 app.all('*', (req: Request, res: Response) => {
