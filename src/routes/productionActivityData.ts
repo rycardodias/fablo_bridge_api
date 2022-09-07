@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import RequestResponse from '../interfaces/RequestResponse'
 const ErrorResponse = require('../validators/ErrorResponse')
 const router = express.Router();
-const Model = require('../models/CompanyCertification')
+const Model = require('../models/ProductionActivityData')
 const isAuthenticated = require('../validators/isAuthenticated')
 
 router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
@@ -33,15 +33,12 @@ router.get('/byId/:id', isAuthenticated(), async (req: Request, res: Response<Re
 
 router.post('/insert', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { issueDate, expirationDate, CompanyId, CompanyCertificationTypeId, CertifyingEntityId } = req.body
+        const { value, ProductionActivityId, DataId } = req.body
 
         const request = await Model.create({
-            issueDate: issueDate,
-            expirationDate: expirationDate,
-            CompanyId: CompanyId,
-            CompanyCertificationTypeId: CompanyCertificationTypeId,
-            CertifyingEntityId: CertifyingEntityId
-
+            value: value,
+            ProductionActivityId: ProductionActivityId,
+            DataId: DataId,
         })
 
         return res.status(201).json({ data: request })
@@ -52,14 +49,12 @@ router.post('/insert', isAuthenticated(), async (req: Request, res: Response, ne
 
 router.put('/update', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id, issueDate, expirationDate, CompanyId, CompanyCertificationTypeId, CertifyingEntityId } = req.body
+        const { id, value, ProductionActivityId, DataId } = req.body
 
         const request = await Model.update({
-            issueDate: issueDate,
-            expirationDate: expirationDate,
-            CompanyId: CompanyId,
-            CompanyCertificationTypeId: CompanyCertificationTypeId,
-            CertifyingEntityId: CertifyingEntityId
+            value: value,
+            ProductionActivityId: ProductionActivityId,
+            DataId: DataId,
         }, {
             where: { id: id },
             returning: true

@@ -10,7 +10,6 @@ class ErrorResponse {
     }
 
     static validationErrorItem(info: any) {
-        // console.log(info)
         let objectResponse = {}
         switch (info.type) {
             case "notNull Violation":
@@ -46,7 +45,6 @@ class ErrorResponse {
 
     static badRequest(error: any) {
         if (!error) return new ErrorResponse(400, "bad_request", undefined)
-console.log(error)
         switch (error.name) {
             case "SequelizeUniqueConstraintError": {
                 const info = error.errors[0]

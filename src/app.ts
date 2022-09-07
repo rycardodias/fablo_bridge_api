@@ -64,7 +64,19 @@ app.use('/companies', require('./routes/company'))
 app.use('/companyCertifications', require('./routes/companyCertification'))
 app.use('/companyCertificationTypes', require('./routes/companyCertificationType'))
 app.use('/certifyingEntities', require('./routes/certifyingEntity'))
-
+app.use('/productionUnits', require('./routes/productionUnit'))
+app.use('/socialEconomicDatas', require('./routes/socialEconomicData'))
+app.use('/batchCertificationTypes', require('./routes/batchCertificationType'))
+app.use('/batchCertifications', require('./routes/batchCertification'))
+app.use('/finalIndicators', require('./routes/finalIndicator'))
+app.use('/circularEnvironmentalFinalDatas', require('./routes/circularEnvironmentalFinalData'))
+app.use('/indicators', require('./routes/indicator'))
+app.use('/activityTypeIndicators', require('./routes/activityTypeIndicator'))
+app.use('/data', require('./routes/data'))
+app.use('/activityTypeData', require('./routes/activityTypeData'))
+app.use('/productionActivityData', require('./routes/productionActivityData'))
+app.use('/rawMaterials', require('./routes/rawMaterial'))
+app.use('/circularEnvironmentalData', require('./routes/circularEnvironmentalData'))
 
 
 
