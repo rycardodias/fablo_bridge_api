@@ -97,7 +97,7 @@ router.post('/login',
             const request = await Model.findOne({ where: { email: email } })
 
             if (!request || !password) {
-                return next(ErrorResponse.noDataFound())
+                return res.status(404).json({ error: req.t("user_not_authenticated") })
             }
 
             if (await bcrypt.compareSync(password, request.password)) {
@@ -105,9 +105,10 @@ router.post('/login',
                     id: request.id,
                     permission: request.permission
                 }
+                return res.status(200).json({ data: req.t("user_authenticated") })
             }
 
-            return res.status(200).json({ data: req.t("user_authenticated") })
+            return res.status(200).json({ error: req.t("user_not_authenticated") })
 
         } catch (error: any) {
             return next(ErrorResponse.badRequest(error))

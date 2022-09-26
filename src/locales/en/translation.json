@@ -12,6 +12,7 @@
     "invalid_delete": "Invalid Delete!",
     "invalid_update": "Invalid Update!",
     "user_authenticated": "User authenticated successfully!",
+    "user_not_authenticated": "User not authenticated!",
     "user_created": "User created successfully!",
 
     "SequelizeValidationErrorItem_must_be_unique": "Field '{{field}}' must be unique!",

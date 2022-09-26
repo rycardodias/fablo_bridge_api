@@ -5,6 +5,7 @@ const i18next = require('i18next');
 const middleware = require('i18next-http-middleware')
 const session = require('express-session')
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
+var cors = require('cors')
 
 db.authenticate()
     .then(() => {
@@ -34,6 +35,7 @@ i18next
 const app: Application = express();
 
 app.use(express.json());
+app.use(cors())
 
 app.use(middleware.handle(i18next))
 
