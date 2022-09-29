@@ -1,10 +1,9 @@
 {
   "scripts": {
-    "dev": "ts-node-dev --files src/index.ts",
+    "dev": "tsc && node dist/index.js",
     "test": "jest --watch --detectOpenHandles",
-    "start": "node src/index.js",
-    "build": "tsc",
-    "postinstall": "npm run build"
+    "start": "node dist/index.js",
+    "postinstall": "tsc"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
