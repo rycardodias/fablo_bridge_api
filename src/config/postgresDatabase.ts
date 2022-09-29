@@ -5,7 +5,15 @@ dotenv.config()
 let db = null;
 
 if (process.env.DATABASE_URL) {
-  db = new Sequelize(process.env.DATABASE_URL)
+  db = new Sequelize(process.env.DATABASE_URL, {
+    ssl: true,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
+  })
 } else {
   db = new Sequelize(process.env.DATABASE, process.env.USER, process.env.PASSWORD, {
     host: process.env.HOST,
