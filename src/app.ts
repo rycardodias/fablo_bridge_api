@@ -88,8 +88,6 @@ app.all('*', (req: Request, res: Response) => {
 
 app.use(ErrorHandler)
 
-module.exports = app
-
-// export default app;
+export default app;
 
 
