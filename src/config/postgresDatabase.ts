@@ -6,7 +6,6 @@ let db = null;
 
 if (process.env.DATABASE_URL) {
   db = new Sequelize(process.env.DATABASE_URL, {
-    ssl: true,
     dialectOptions: {
       ssl: {
         require: true,
