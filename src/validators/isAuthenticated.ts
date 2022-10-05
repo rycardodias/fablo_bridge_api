@@ -3,6 +3,7 @@ const ErrorResponse = require('./ErrorResponse')
 
 const isAuthenticated = (permissions: Array<string> | undefined) =>
     (req: Request, res: Response, next: NextFunction) => {
+        console.log(req.session.user)
 
         if (req.session.user) {
 

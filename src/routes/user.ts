@@ -8,20 +8,22 @@ const Model = require('../models/User')
 const bcrypt = require('bcrypt');
 const isAuthenticated = require('../validators/isAuthenticated')
 
-router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
-    try {
-        const request = await Model.findAll({ exclude: ['password'] })
+router.get('/',
+    isAuthenticated(),
+    async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+        try {
+            const request = await Model.findAll({ exclude: ['password'] })
+            
+            if (request.length === 0) {
+                return next(ErrorResponse.noDataFound())
+            }
 
-        if (request.length === 0) {
-            return next(ErrorResponse.noDataFound())
+            return res.status(200).json({ data: request })
+
+        } catch (error) {
+            return next(ErrorResponse.badRequest())
         }
-
-        return res.status(200).json({ data: request })
-
-    } catch (error) {
-        return next(ErrorResponse.badRequest())
-    }
-});
+    });
 
 router.post('/insert', async (req: Request, res: Response, next: NextFunction) => {
     try {
