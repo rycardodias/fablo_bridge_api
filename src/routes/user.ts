@@ -95,14 +95,17 @@ router.post('/login',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { email, password } = req.body
+            console.log("entra aa")
 
             const request = await Model.findOne({ where: { email: email } })
 
             if (!request || !password) {
                 return res.status(404).json({ error: req.t("user_not_authenticated") })
             }
+            
 
             if (await bcrypt.compareSync(password, request.password)) {
+                console.log("entra")
                 req.session.user = {
                     id: request.id,
                     permission: request.permission
