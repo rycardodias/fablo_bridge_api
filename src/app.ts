@@ -38,7 +38,7 @@ app.use(express.json());
 app.use(cors({
     origin: process.env.WEB_APP_URL || "http://localhost:3000",
     credentials: true,            //access-control-allow-credentials:true
-    optionSuccessStatus: 200
+    optionSuccessStatus: 200,
 }))
 
 app.use(middleware.handle(i18next))
@@ -55,7 +55,8 @@ app.use(session({
     saveUninitialized: true,
     store: sessionStore,
     cookie: {
-        maxAge: 60 * 60 * 24 * 1000
+        maxAge: 60 * 60 * 24 * 1000,
+        sameSite: 'none'
     }
 }))
 
