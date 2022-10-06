@@ -105,11 +105,13 @@ router.post('/login',
             
 
             if (await bcrypt.compareSync(password, request.password)) {
-                console.log("entra", request)
+                
                 req.session.user = {
                     id: request.id,
                     permission: request.permission
                 }
+
+                console.log("entra", req.session.user)
                 return res.status(200).json({ data: req.t("user_authenticated") })
             }
 
