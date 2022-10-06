@@ -36,9 +36,12 @@ const app: Application = express();
 
 app.use(express.json());
 app.use(cors({
-    origin: process.env.WEB_APP_URL || "http://localhost:3000",
+    origin: [
+        `https://${process.env.WEB_APP_URL}`,
+        `http://${process.env.WEB_APP_URL}`,
+        "http://localhost:3000"],
     credentials: true,            //access-control-allow-credentials:true
-    optionSuccessStatus: 200,
+    // optionSuccessStatus: 200,
 }))
 
 app.use(middleware.handle(i18next))
