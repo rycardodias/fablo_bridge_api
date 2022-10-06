@@ -35,6 +35,7 @@ i18next
 const app: Application = express();
 
 app.use(express.json());
+app.set('trust proxy', 1)
 app.use(cors({
     // origin: [
     //     `https://${process.env.WEB_APP_URL}`,
@@ -59,8 +60,8 @@ app.use(session({
     store: sessionStore,
     cookie: {
         maxAge: 60 * 60 * 24 * 1000,
-        // sameSite: 'none',
-        // secure: true,
+        sameSite: 'none',
+        secure: true,
     }
 }))
 
