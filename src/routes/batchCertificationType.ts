@@ -5,7 +5,7 @@ const router = express.Router();
 const Model = require('../models/BatchCertificationType')
 const isAuthenticated = require('../validators/isAuthenticated')
 
-router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+router.get('/',  async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const request = await Model.findAll()
 
