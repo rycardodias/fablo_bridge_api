@@ -9,11 +9,11 @@ const bcrypt = require('bcrypt');
 const isAuthenticated = require('../validators/isAuthenticated')
 
 router.get('/',
-    isAuthenticated(),
+    isAuthenticated(['ADMIN']),
     async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
         try {
             const request = await Model.findAll({ exclude: ['password'] })
-            
+
             if (request.length === 0) {
                 return next(ErrorResponse.noDataFound())
             }
@@ -102,17 +102,22 @@ router.post('/login',
             if (!request || !password) {
                 return res.status(404).json({ error: req.t("user_not_authenticated") })
             }
-            
 
             if (await bcrypt.compareSync(password, request.password)) {
-                
+
                 req.session.user = {
                     id: request.id,
                     permission: request.permission
                 }
 
-                console.log("entra", req.session.user)
-                return res.status(200).json({ data: req.t("user_authenticated") })
+                // console.log("entra", req.session.user)
+                // return res.status(200).json({ data: req.t("user_authenticated") })
+                return res.status(200).json({
+                    data: {
+                        name: request.name,
+                        permission: request.permission
+                    }
+                })
             }
 
             return res.status(200).json({ error: req.t("user_not_authenticated") })

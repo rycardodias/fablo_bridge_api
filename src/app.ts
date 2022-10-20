@@ -87,6 +87,10 @@ app.use('/productionActivityData', require('./routes/productionActivityData'))
 app.use('/rawMaterials', require('./routes/rawMaterial'))
 app.use('/circularEnvironmentalData', require('./routes/circularEnvironmentalData'))
 
+app.use('/onchain/users', require('./routes/onChain/user'))
+app.use('/onchain/channel/batch', require('./routes/onChain/channel/batch'))
+
+
 
 
 app.all('*', (req: Request, res: Response) => {
