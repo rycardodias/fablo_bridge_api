@@ -1,18 +1,17 @@
 import express, { Request, Response, NextFunction } from "express";
-import RequestResponse from '../interfaces/RequestResponse'
-const ErrorResponse = require('../validators/ErrorResponse')
+import RequestResponse from '../../interfaces/RequestResponse'
+const ErrorResponse = require('../../validators/ErrorResponse')
 const router = express.Router();
-const Model = require('../models/ActivityTypeIndicator')
-const isAuthenticated = require('../validators/isAuthenticated')
+const Model = require('../../models/BatchCertificationType')
+const isAuthenticated = require('../../validators/isAuthenticated')
 
-router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+router.get('/',  async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const request = await Model.findAll()
-        
+
         if (request.length === 0) {
             return next(ErrorResponse.noDataFound())
         }
-        
 
         return res.status(200).json({ data: request })
     } catch (error) {
@@ -34,11 +33,11 @@ router.get('/byId/:id', isAuthenticated(), async (req: Request, res: Response<Re
 
 router.post('/insert', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { ActivityTypeId, IndicatorId } = req.body
+        const { name, description } = req.body
 
         const request = await Model.create({
-            ActivityTypeId: ActivityTypeId,
-            IndicatorId: IndicatorId,
+            name: name,
+            description: description,
         })
 
         return res.status(201).json({ data: request })
@@ -49,11 +48,11 @@ router.post('/insert', isAuthenticated(), async (req: Request, res: Response, ne
 
 router.put('/update', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id, ActivityTypeId, IndicatorId } = req.body
+        const { id, name, description } = req.body
 
         const request = await Model.update({
-            ActivityTypeId: ActivityTypeId,
-            IndicatorId: IndicatorId,
+            name: name,
+            description: description,
         }, {
             where: { id: id },
             returning: true

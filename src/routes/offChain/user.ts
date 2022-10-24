@@ -1,12 +1,12 @@
 import express, { Request, Response, NextFunction } from "express";
 import { body, validationResult } from 'express-validator';
-import RequestResponse from '../interfaces/RequestResponse'
-import BodyValidator from "../validators/BodyValidator";
-const ErrorResponse = require('../validators/ErrorResponse')
+import RequestResponse from '../../interfaces/RequestResponse'
+import BodyValidator from "../../validators/BodyValidator";
+const ErrorResponse = require('../../validators/ErrorResponse')
 const router = express.Router();
-const Model = require('../models/User')
+const Model = require('../../models/User')
 const bcrypt = require('bcrypt');
-const isAuthenticated = require('../validators/isAuthenticated')
+const isAuthenticated = require('../../validators/isAuthenticated')
 
 router.get('/',
     isAuthenticated(['ADMIN']),
@@ -95,7 +95,6 @@ router.post('/login',
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { email, password } = req.body
-            console.log("entra aa")
 
             const request = await Model.findOne({ where: { email: email } })
 
@@ -110,7 +109,6 @@ router.post('/login',
                     permission: request.permission
                 }
 
-                // console.log("entra", req.session.user)
                 // return res.status(200).json({ data: req.t("user_authenticated") })
                 return res.status(200).json({
                     data: {

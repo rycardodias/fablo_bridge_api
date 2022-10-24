@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
-import RequestResponse from '../interfaces/RequestResponse'
-const ErrorResponse = require('../validators/ErrorResponse')
+import RequestResponse from '../../interfaces/RequestResponse'
+const ErrorResponse = require('../../validators/ErrorResponse')
 const router = express.Router();
-const Model = require('../models/RawMaterial')
-const isAuthenticated = require('../validators/isAuthenticated')
+const Model = require('../../models/CircularEnvironmentalData')
+const isAuthenticated = require('../../validators/isAuthenticated')
 
 router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
@@ -33,15 +33,13 @@ router.get('/byId/:id', isAuthenticated(), async (req: Request, res: Response<Re
 
 router.post('/insert', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { textContentId, fiberName, climateChange, fossilDepletion, freshwatterConsunsuption, freshwatterEutrophication } = req.body
+        const { value, formulaValue, ProductionActivityId, IndicatorId } = req.body
 
         const request = await Model.create({
-            textContentId: textContentId,
-            fiberName: fiberName,
-            climateChange: climateChange,
-            fossilDepletion: fossilDepletion,
-            freshwatterConsunsuption: freshwatterConsunsuption,
-            freshwatterEutrophication: freshwatterEutrophication,
+            formulaValue: formulaValue,
+            value: value,
+            ProductionActivityId: ProductionActivityId,
+            IndicatorId: IndicatorId,
         })
 
         return res.status(201).json({ data: request })
@@ -52,15 +50,13 @@ router.post('/insert', isAuthenticated(), async (req: Request, res: Response, ne
 
 router.put('/update', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id, textContentId, fiberName, climateChange, fossilDepletion, freshwatterConsunsuption, freshwatterEutrophication } = req.body
+        const { id, value, formulaValue, ProductionActivityId, IndicatorId } = req.body
 
         const request = await Model.update({
-            textContentId: textContentId,
-            fiberName: fiberName,
-            climateChange: climateChange,
-            fossilDepletion: fossilDepletion,
-            freshwatterConsunsuption: freshwatterConsunsuption,
-            freshwatterEutrophication: freshwatterEutrophication,
+            formulaValue: formulaValue,
+            value: value,
+            ProductionActivityId: ProductionActivityId,
+            IndicatorId: IndicatorId,
         }, {
             where: { id: id },
             returning: true

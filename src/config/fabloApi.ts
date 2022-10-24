@@ -3,10 +3,11 @@ import { Request, Response } from "express";
 
 export default async function fabloRequest(req: Request, method: string, url: string, data: object | undefined = undefined): Promise<any> {
     try {
-        const token = req.session.user.onChainToken
+        const token = req.session.user && req.session.user.onChainToken
+        
         const request = await axios({
             headers: {
-                authorization: `Bearer ${token}`
+                authorization: token ? `Bearer ${token}` : undefined
             },
             method: method,
             baseURL: "http://95.111.233.14:8801",

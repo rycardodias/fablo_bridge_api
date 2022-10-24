@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
-import RequestResponse from '../interfaces/RequestResponse'
-const ErrorResponse = require('../validators/ErrorResponse')
+import RequestResponse from '../../interfaces/RequestResponse'
+const ErrorResponse = require('../../validators/ErrorResponse')
 const router = express.Router();
-const Model = require('../models/CircularEnvironmentalFinalData')
-const isAuthenticated = require('../validators/isAuthenticated')
+const Model = require('../../models/CertifyingEntity')
+const isAuthenticated = require('../../validators/isAuthenticated')
 
 router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
@@ -33,11 +33,11 @@ router.get('/byId/:id', isAuthenticated(), async (req: Request, res: Response<Re
 
 router.post('/insert', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { value, FinalIndicatorId } = req.body
+        const { name, description } = req.body
 
         const request = await Model.create({
-            value: value,
-            FinalIndicatorId: FinalIndicatorId
+            name: name,
+            description: description,
         })
 
         return res.status(201).json({ data: request })
@@ -48,11 +48,11 @@ router.post('/insert', isAuthenticated(), async (req: Request, res: Response, ne
 
 router.put('/update', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id, value, FinalIndicatorId } = req.body
+        const { id, name, description } = req.body
 
         const request = await Model.update({
-            value: value,
-            FinalIndicatorId: FinalIndicatorId
+            name: name,
+            description: description,
         }, {
             where: { id: id },
             returning: true

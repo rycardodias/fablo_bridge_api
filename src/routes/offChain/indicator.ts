@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
-import RequestResponse from '../interfaces/RequestResponse'
-const ErrorResponse = require('../validators/ErrorResponse')
+import RequestResponse from '../../interfaces/RequestResponse'
+const ErrorResponse = require('../../validators/ErrorResponse')
 const router = express.Router();
-const Model = require('../models/Indicator')
-const isAuthenticated = require('../validators/isAuthenticated')
+const Model = require('../../models/Indicator')
+const isAuthenticated = require('../../validators/isAuthenticated')
 
 router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {

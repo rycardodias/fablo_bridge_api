@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
-import RequestResponse from '../interfaces/RequestResponse'
-const ErrorResponse = require('../validators/ErrorResponse')
+import RequestResponse from '../../interfaces/RequestResponse'
+const ErrorResponse = require('../../validators/ErrorResponse')
 const router = express.Router();
-const Model = require('../models/SocialEconomicData')
-const isAuthenticated = require('../validators/isAuthenticated')
+const Model = require('../../models/BatchCertification')
+const isAuthenticated = require('../../validators/isAuthenticated')
 
 router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
@@ -33,11 +33,15 @@ router.get('/byId/:id', isAuthenticated(), async (req: Request, res: Response<Re
 
 router.post('/insert', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { localization, CompanyId } = req.body
+        const { issueDate, expirationDate, BatchId, BatchCertificationTypeId, CertifyingEntityId } = req.body
 
         const request = await Model.create({
-            localization: localization,
-            CompanyId: CompanyId,
+            issueDate: issueDate,
+            expirationDate: expirationDate,
+            BatchId: BatchId,
+            BatchCertificationTypeId: BatchCertificationTypeId,
+            CertifyingEntityId: CertifyingEntityId
+
         })
 
         return res.status(201).json({ data: request })
@@ -48,11 +52,14 @@ router.post('/insert', isAuthenticated(), async (req: Request, res: Response, ne
 
 router.put('/update', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id, localization, CompanyId } = req.body
+        const { id, issueDate, expirationDate, BatchId, BatchCertificationTypeId, CertifyingEntityId } = req.body
 
         const request = await Model.update({
-            localization: localization,
-            CompanyId: CompanyId,
+            issueDate: issueDate,
+            expirationDate: expirationDate,
+            BatchId: BatchId,
+            BatchCertificationTypeId: BatchCertificationTypeId,
+            CertifyingEntityId: CertifyingEntityId
         }, {
             where: { id: id },
             returning: true

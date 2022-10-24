@@ -1,11 +1,11 @@
 import express, { Request, Response, NextFunction } from "express";
-import RequestResponse from '../interfaces/RequestResponse'
-const ErrorResponse = require('../validators/ErrorResponse')
+import RequestResponse from '../../interfaces/RequestResponse'
+const ErrorResponse = require('../../validators/ErrorResponse')
 const router = express.Router();
-const Model = require('../models/BatchCertificationType')
-const isAuthenticated = require('../validators/isAuthenticated')
+const Model = require('../../models/SocialEconomicData')
+const isAuthenticated = require('../../validators/isAuthenticated')
 
-router.get('/',  async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const request = await Model.findAll()
 
@@ -33,11 +33,11 @@ router.get('/byId/:id', isAuthenticated(), async (req: Request, res: Response<Re
 
 router.post('/insert', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name, description } = req.body
+        const { localization, CompanyId } = req.body
 
         const request = await Model.create({
-            name: name,
-            description: description,
+            localization: localization,
+            CompanyId: CompanyId,
         })
 
         return res.status(201).json({ data: request })
@@ -48,11 +48,11 @@ router.post('/insert', isAuthenticated(), async (req: Request, res: Response, ne
 
 router.put('/update', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id, name, description } = req.body
+        const { id, localization, CompanyId } = req.body
 
         const request = await Model.update({
-            name: name,
-            description: description,
+            localization: localization,
+            CompanyId: CompanyId,
         }, {
             where: { id: id },
             returning: true

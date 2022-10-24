@@ -8,7 +8,6 @@ const isAuthenticated = require('../../validators/isAuthenticated')
 router.post('/enroll', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const { id, secret } = req.body
-
         const request = await fabloRequest(req, 'POST', '/user/enroll', { id, secret })
 
         req.session.user = {

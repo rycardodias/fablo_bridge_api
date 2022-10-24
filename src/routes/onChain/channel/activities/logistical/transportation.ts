@@ -1,14 +1,15 @@
 import express, { Request, Response, NextFunction } from "express";
-import fabloRequest, { fabloChannelRequest } from "../../../config/fabloApi";
-import RequestResponse from '../../../interfaces/RequestResponse'
-const ErrorResponse = require('../../../validators/ErrorResponse')
+import { fabloChannelRequest } from "../../../../../config/fabloApi";
+import RequestResponse from '../../../../../interfaces/RequestResponse'
+const ErrorResponse = require('../../../../../validators/ErrorResponse')
 const router = express.Router();
 // const isAuthenticated = require('../../validators/isAuthenticated')
+
 
 router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const data = {
-            method: "StvgdContract:GetAvailableBatches",
+            method: "StvgdContract:GetAllTransports",
             args: []
         }
 
@@ -20,12 +21,12 @@ router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextF
     }
 });
 
-router.get('/getBatchById/:id', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+router.get('/getById/:id', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const { id } = req.params
 
         const data = {
-            method: "StvgdContract:ReadBatch",
+            method: "StvgdContract:ReadTransport",
             args: [id]
         }
 
@@ -37,12 +38,35 @@ router.get('/getBatchById/:id', async (req: Request, res: Response<RequestRespon
     }
 });
 
+router.post('/insert', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+    try {
+        const { transportID, destinationProductionUnitID, transportationTypeID, activityDate,
+            inputBatch, distance, cost, isReturn } = req.body;
+
+        const data = {
+            method: "StvgdContract:CreateTransport",
+            args: [transportID, destinationProductionUnitID, transportationTypeID, activityDate,
+                JSON.stringify(inputBatch), distance, cost, isReturn]
+        }
+
+
+        const request = await fabloChannelRequest(req, 'invoke', data)
+
+        return res.status(200).json({ data: request.data })
+    } catch (error: any) {
+        console.log(error)
+        // return next(ErrorResponse.badRequest())
+        return res.status(error.response.status).json({ error: error.response.data })
+    }
+});
+
+
 router.delete('/delete', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const { id } = req.body;
 
         const data = {
-            method: "StvgdContract:DeleteBatch",
+            method: "StvgdContract:DeleteRegistration",
             args: [id]
         }
 

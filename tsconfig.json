@@ -2,7 +2,7 @@
   "include": [
     "src/",
     "src/**/*.json"
-  ],
+, "src/routes/onChain/channel/activities/.ts"  ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 

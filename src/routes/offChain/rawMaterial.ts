@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
-import RequestResponse from '../interfaces/RequestResponse'
-const ErrorResponse = require('../validators/ErrorResponse')
+import RequestResponse from '../../interfaces/RequestResponse'
+const ErrorResponse = require('../../validators/ErrorResponse')
 const router = express.Router();
-const Model = require('../models/FinalIndicator')
-const isAuthenticated = require('../validators/isAuthenticated')
+const Model = require('../../models/RawMaterial')
+const isAuthenticated = require('../../validators/isAuthenticated')
 
 router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
@@ -33,10 +33,15 @@ router.get('/byId/:id', isAuthenticated(), async (req: Request, res: Response<Re
 
 router.post('/insert', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { name } = req.body
+        const { textContentId, fiberName, climateChange, fossilDepletion, freshwatterConsunsuption, freshwatterEutrophication } = req.body
 
         const request = await Model.create({
-            name: name
+            textContentId: textContentId,
+            fiberName: fiberName,
+            climateChange: climateChange,
+            fossilDepletion: fossilDepletion,
+            freshwatterConsunsuption: freshwatterConsunsuption,
+            freshwatterEutrophication: freshwatterEutrophication,
         })
 
         return res.status(201).json({ data: request })
@@ -47,10 +52,15 @@ router.post('/insert', isAuthenticated(), async (req: Request, res: Response, ne
 
 router.put('/update', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id, name, } = req.body
+        const { id, textContentId, fiberName, climateChange, fossilDepletion, freshwatterConsunsuption, freshwatterEutrophication } = req.body
 
         const request = await Model.update({
-            name: name,
+            textContentId: textContentId,
+            fiberName: fiberName,
+            climateChange: climateChange,
+            fossilDepletion: fossilDepletion,
+            freshwatterConsunsuption: freshwatterConsunsuption,
+            freshwatterEutrophication: freshwatterEutrophication,
         }, {
             where: { id: id },
             returning: true

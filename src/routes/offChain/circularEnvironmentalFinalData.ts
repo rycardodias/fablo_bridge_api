@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
-import RequestResponse from '../interfaces/RequestResponse'
-const ErrorResponse = require('../validators/ErrorResponse')
+import RequestResponse from '../../interfaces/RequestResponse'
+const ErrorResponse = require('../../validators/ErrorResponse')
 const router = express.Router();
-const Model = require('../models/Company')
-const isAuthenticated = require('../validators/isAuthenticated')
+const Model = require('../../models/CircularEnvironmentalFinalData')
+const isAuthenticated = require('../../validators/isAuthenticated')
 
 router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
@@ -33,13 +33,11 @@ router.get('/byId/:id', isAuthenticated(), async (req: Request, res: Response<Re
 
 router.post('/insert', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { legalName, shortName, fiscalNumber, caeType } = req.body
+        const { value, FinalIndicatorId } = req.body
 
         const request = await Model.create({
-            legalName: legalName,
-            shortName: shortName,
-            fiscalNumber: fiscalNumber,
-            caeType: caeType
+            value: value,
+            FinalIndicatorId: FinalIndicatorId
         })
 
         return res.status(201).json({ data: request })
@@ -50,13 +48,11 @@ router.post('/insert', isAuthenticated(), async (req: Request, res: Response, ne
 
 router.put('/update', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id, legalName, shortName, fiscalNumber, caeType } = req.body
+        const { id, value, FinalIndicatorId } = req.body
 
         const request = await Model.update({
-            legalName: legalName,
-            shortName: shortName,
-            fiscalNumber: fiscalNumber,
-            caeType: caeType
+            value: value,
+            FinalIndicatorId: FinalIndicatorId
         }, {
             where: { id: id },
             returning: true
