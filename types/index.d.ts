@@ -3,7 +3,7 @@ export {};
 declare global {
   namespace Express {
     interface Request {
-      t: function;
+      t: Function;
       session: any;
     }
   }
