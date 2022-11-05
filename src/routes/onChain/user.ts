@@ -17,7 +17,7 @@ router.post('/enroll', async (req: Request, res: Response<RequestResponse>, next
 
         return res.status(200).json({ data: req.t("user_authenticated") })
     } catch (error: any) {
-        return res.status(error.response.status).json({ error: error.response.data })
+        return res.status(error.response.status).json({ error: error.response.data.message })
     }
 });
 
@@ -25,9 +25,9 @@ router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextF
     try {
         const request = await fabloRequest(req, 'GET', '/user/identities')
 
-        return res.status(200).json({ data: request.data })
+        return res.status(200).json({ data: request.data.response.identities })
     } catch (error: any) {
-        return res.status(error.response.status).json({ error: error.response.data })
+        return res.status(error.response.status).json({ error: error.response.data.message })
     }
 });
 

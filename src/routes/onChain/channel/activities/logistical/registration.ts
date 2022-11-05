@@ -15,9 +15,9 @@ router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextF
 
         const request = await fabloChannelRequest(req, 'query', data)
 
-        return res.status(200).json({ data: request.data })
+        return res.status(200).json({ data: request.data.response })
     } catch (error: any) {
-        return res.status(error.response.status).json({ error: error.response.data })
+        return res.status(error.response.status).json({ error: error.response.data.message })
     }
 });
 
@@ -32,9 +32,9 @@ router.get('/getById/:id', async (req: Request, res: Response<RequestResponse>, 
 
         const request = await fabloChannelRequest(req, 'query', data)
 
-        return res.status(200).json({ data: request.data })
+        return res.status(200).json({ data: request.data.response })
     } catch (error: any) {
-        return res.status(error.response.status).json({ error: error.response.data })
+        return res.status(error.response.status).json({ error: error.response.data.message })
     }
 });
 
@@ -63,28 +63,10 @@ router.post('/insert', async (req: Request, res: Response<RequestResponse>, next
 
         const request = await fabloChannelRequest(req, 'invoke', data)
 
-        return res.status(200).json({ data: request.data })
+        return res.status(200).json({ data: request.data.response })
     } catch (error: any) {
         // return next(ErrorResponse.badRequest())
-        return res.status(error.response.status).json({ error: error.response.data })
-    }
-});
-
-
-router.delete('/delete', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
-    try {
-        const { id } = req.body;
-
-        const data = {
-            method: "StvgdContract:DeleteRegistration",
-            args: [id]
-        }
-
-        const request = await fabloChannelRequest(req, 'invoke', data)
-
-        return res.status(200).json({ data: request.data })
-    } catch (error: any) {
-        return res.status(error.response.status).json({ error: error.response.data })
+        return res.status(error.response.status).json({ error: error.response.data.message })
     }
 });
 
