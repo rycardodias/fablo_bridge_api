@@ -2,29 +2,35 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('RawMaterials', {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      password: {
+      textContentId: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      name: {
+      fiberName: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      permission: {
-        type: Sequelize.STRING,
+      climateChange: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        defaultValue: "USER"
+      },
+      fossilDepletion: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      freshwatterConsunsuption: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      freshwatterEutrophication: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +43,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('RawMaterials');
   }
 };

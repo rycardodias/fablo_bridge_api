@@ -2,29 +2,35 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('BatchCertificationTypes', {
       id: {
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Error! Field {name} is required!"
+          },
+          notNull: {
+            msg: "Error! Field {name} is required!"
+          },
+        }
       },
-      permission: {
+      description: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: "USER"
+        validate: {
+          notEmpty: {
+            msg: "Error! Field {description} is required!"
+          },
+          notNull: {
+            msg: "Error! Field {description} is required!"
+          },
+        }
       },
       createdAt: {
         allowNull: false,
@@ -37,6 +43,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('BatchCertificationTypes');
   }
 };
