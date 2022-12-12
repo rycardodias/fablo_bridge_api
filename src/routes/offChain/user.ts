@@ -98,6 +98,8 @@ router.post('/login',
 
             const request = await Model.findOne({ where: { email: email } })
 
+            console.log('request', request)
+
             if (!request || !password) {
                 return res.status(404).json({ error: req.t("user_not_authenticated") })
             }
@@ -121,6 +123,7 @@ router.post('/login',
             return res.status(200).json({ error: req.t("user_not_authenticated") })
 
         } catch (error: any) {
+            console.log(error)
             return next(ErrorResponse.badRequest(error))
         }
     });

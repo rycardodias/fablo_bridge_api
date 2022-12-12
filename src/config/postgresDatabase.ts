@@ -1,6 +1,7 @@
 const { Sequelize } = require('sequelize');
-const dotenv = require('dotenv');
-dotenv.config()
+require('dotenv').config()
+
+const config = require('./config')[process.env.NODE_ENV || "development"];
 
 let db = null;
 
@@ -11,9 +12,9 @@ if (process.env.DATABASE_URL) {
     }
   })
 } else {
-  db = new Sequelize(process.env.DATABASE, process.env.USER, process.env.PASSWORD, {
-    host: process.env.HOST,
-    dialect: 'postgres',
+  db = new Sequelize(config.database, config.username, config.password, {
+    host: config.host,
+    dialect: config.dialect,
     protocol: 'postgres',
     logging: false,
   });

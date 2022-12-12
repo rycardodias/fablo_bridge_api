@@ -1,0 +1,44 @@
+# Use postgres/example user/password credentials
+version: "3.1"
+
+services:
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    environment:
+      DATABASE_HOST: $DATABASE_HOST
+      POSTGRES_USER: $DATABASE_USER
+      POSTGRES_PASSWORD: $DATABASE_PASSWORD
+      POSTGRES_DB: $DATABASE_NAME
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+
+  app:
+    image: nodeimage
+    container_name: nodeserver
+    build: ./
+    restart: always
+    ports:
+      - "4000:4000"
+    links:
+      - db
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: docker
+      SERVER_PORT: 4000
+    depends_on:
+      - db

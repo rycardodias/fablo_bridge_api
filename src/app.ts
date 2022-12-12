@@ -8,15 +8,12 @@ const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const cors = require('cors')
 
 db.authenticate()
-    .then(() => {
-        // console.clear()
-        console.info('Connection has been established successfully.')
-        // db.sync({ alter: true })
-        //     .then(() => console.log("All models were synchronized successfully."))
-        //     .catch((error: any) => console.error('Unable to connect to the database:', error))
-
-    })
+    .then(() => console.info('Connection has been established successfully.'))
     .catch((error: any) => console.error('Unable to connect to the database:', error))
+
+db.sync({ alter: process.env.NODE_ENV === 'docker' })
+    .then(() => console.log("All models were synchronized successfully."))
+    .catch((error: any) => console.error('Unable to syncronize database:', error))
 
 i18next
     .use(middleware.LanguageDetector)
