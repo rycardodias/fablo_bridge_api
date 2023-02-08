@@ -52,7 +52,7 @@ const sessionStore = new SequelizeStore({
 app.use(session({
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store: sessionStore,
     cookie: {
         maxAge: 60 * 60 * 24 * 1000,

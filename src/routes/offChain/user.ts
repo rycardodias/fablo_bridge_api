@@ -98,8 +98,6 @@ router.post('/login',
 
             const request = await Model.findOne({ where: { email: email } })
 
-            console.log('request', request)
-
             if (!request || !password) {
                 return res.status(404).json({ error: req.t("user_not_authenticated") })
             }
@@ -127,5 +125,13 @@ router.post('/login',
             return next(ErrorResponse.badRequest(error))
         }
     });
+
+router.post('/logout', async (req, res) => {
+    //@ts-ignore
+    req.session.destroy();
+    res.clearCookie('connect.sid')
+
+    return res.status(200).json({ data: "logged out" })
+})
 
 module.exports = router
