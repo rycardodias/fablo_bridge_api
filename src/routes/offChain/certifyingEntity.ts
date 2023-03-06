@@ -9,10 +9,6 @@ router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestRes
     try {
         const request = await Model.findAll()
 
-        if (request.length === 0) {
-            return next(ErrorResponse.noDataFound())
-        }
-
         return res.status(200).json({ data: request })
     } catch (error) {
         return next(ErrorResponse.badRequest())
@@ -22,8 +18,6 @@ router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestRes
 router.get('/byId/:id', isAuthenticated(), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const request = await Model.findByPk(req.params.id)
-
-        if (!request) return next(ErrorResponse.noDataFound())
 
         return res.status(200).json({ data: request })
     } catch (error) {

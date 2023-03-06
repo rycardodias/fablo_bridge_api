@@ -14,10 +14,6 @@ router.get('/',
         try {
             const request = await Model.findAll({ exclude: ['password'] })
 
-            if (request.length === 0) {
-                return next(ErrorResponse.noDataFound())
-            }
-
             return res.status(200).json({ data: request })
 
         } catch (error) {
