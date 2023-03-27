@@ -17,7 +17,8 @@ router.post('/enroll', async (req: Request, res: Response<RequestResponse>, next
 
         return res.status(200).json({ data: req.t("user_authenticated") })
     } catch (error: any) {
-        return res.status(error.response.status).json({ error: error.response.data.message })
+        console.log(error)
+        return res.status(404).json({ error: error })
     }
 });
 

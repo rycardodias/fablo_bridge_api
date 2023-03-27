@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 const db = require('../config/postgresDatabase');
+const Company = require('./Company')
 
 const User = db.define('User', {
     id: {
@@ -55,5 +56,10 @@ const User = db.define('User', {
 }, {
     // Other model options go here
 });
+
+User.belongsTo(Company, {
+    // onDelete: 'CASCADE',
+    foreignKey: { allowNull: true },
+})
 
 module.exports = User

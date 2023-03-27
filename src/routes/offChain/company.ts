@@ -9,10 +9,6 @@ router.get('/', isAuthenticated(), async (req: Request, res: Response<RequestRes
     try {
         const request = await Model.findAll()
 
-        // if (request.length === 0) {
-        //     return next(ErrorResponse.noDataFound())
-        // }
-        console.log(request)
         return res.status(200).json({ data: request })
     } catch (error) {
         console.log(error)

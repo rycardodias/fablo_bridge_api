@@ -102,7 +102,8 @@ router.post('/login',
 
                 req.session.user = {
                     id: request.id,
-                    permission: request.permission
+                    permission: request.permission,
+                    companyId: request.CompanyId
                 }
 
                 // return res.status(200).json({ data: req.t("user_authenticated") })
