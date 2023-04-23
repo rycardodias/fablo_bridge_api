@@ -40,22 +40,19 @@ router.get('/getById/:id', async (req: Request, res: Response<RequestResponse>, 
 
 router.post('/insert', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
-        const { receptionID, productionUnitID, activityDate, receivedBatchID, newBatchID,
-            newBatchInternalID, isAccepted, ECS, SES } = req.body;
+        const { receptionID, productionUnitInternalID, activityDate, receivedBatchID, newBatchID,
+            newBatchInternalID, isAccepted, transportScore, ses, distance } = req.body;
 
         const data = {
             method: "StvgdContract:CreateReception",
-            args: [receptionID, productionUnitID, activityDate, receivedBatchID, newBatchID,
-                newBatchInternalID, isAccepted, ECS, SES]
+            args: [receptionID, productionUnitInternalID, activityDate, receivedBatchID, newBatchID,
+                newBatchInternalID, isAccepted, transportScore, ses, distance]
         }
-
 
         const request = await fabloChannelRequest(req, 'invoke', data)
 
         return res.status(200).json({ data: request.data.response })
     } catch (error: any) {
-        console.log(error)
-        return next(ErrorResponse.badRequest())
         return res.status(error.response.status).json({ error: error.response.data.message })
     }
 });

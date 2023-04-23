@@ -12,12 +12,20 @@ export default async function fabloRequest(req: Request, method: string, url: st
 
         const PORTS: PortStructure[] = [
             {
-                company: '2e60f768-fcdc-48c8-a943-faa0993894a5',
+                company: 'cb8e79f5-34a9-4b4f-afbd-f193e95bc07a',
+                port: '8800'
+            },
+            {
+                company: 'c19569b8-a5c4-4ca6-82ba-34b8269e6b25',
                 port: '8801'
             },
             {
-                company: 'TESTE',
+                company: 'd640eecf-a328-477a-b03d-b548dd2f86f8',
                 port: '8802'
+            },
+            {
+                company: '1d86f02b-5273-4165-8244-f4a63a938c6d',
+                port: '8803'
             },
         ]
 

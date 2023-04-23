@@ -41,15 +41,14 @@ router.get('/getById/:id', async (req: Request, res: Response<RequestResponse>, 
 
 router.post('/insert', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
-        const { transportID, destinationProductionUnitID, transportationTypeID, activityDate,
-            inputBatch, distance, cost, isReturn } = req.body;
+        const { transportID, originProductionUnitInternalID, destinationProductionUnitID, transportType,
+            activityDate, inputBatches, isReturn } = req.body;
 
         const data = {
             method: "StvgdContract:CreateTransport",
-            args: [transportID, destinationProductionUnitID, transportationTypeID, activityDate,
-                JSON.stringify(inputBatch), distance, cost, isReturn]
+            args: [transportID, originProductionUnitInternalID, destinationProductionUnitID, transportType,
+                activityDate, JSON.stringify(inputBatches), isReturn]
         }
-
 
         const request = await fabloChannelRequest(req, 'invoke', data)
 

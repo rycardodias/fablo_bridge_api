@@ -100,6 +100,7 @@ router.post('/login',
 
             if (await bcrypt.compareSync(password, request.password)) {
 
+                
                 req.session.user = {
                     id: request.id,
                     permission: request.permission,
@@ -110,7 +111,8 @@ router.post('/login',
                 return res.status(200).json({
                     data: {
                         name: request.name,
-                        permission: request.permission
+                        permission: request.permission,
+                        companyId: request.CompanyId
                     }
                 })
             }
