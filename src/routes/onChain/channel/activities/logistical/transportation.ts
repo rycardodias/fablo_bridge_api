@@ -54,9 +54,7 @@ router.post('/insert', async (req: Request, res: Response<RequestResponse>, next
 
         return res.status(200).json({ data: request.data.response })
     } catch (error: any) {
-        console.log(error)
-        // return next(ErrorResponse.badRequest())
-        return res.status(error.response.status).json({ error: error.response.data.message })
+        return res.status(400).json({ error: error })
     }
 });
 
