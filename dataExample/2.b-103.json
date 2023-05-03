@@ -1,0 +1,127 @@
+{
+   "data": {
+      "docType": "b",
+      "ID": "b-103",
+      "batchType": "YARN",
+      "latestOwner": "InovafilMSP:PU1",
+      "batchInternalID": "b-103-iid",
+      "supplierID": "suppl-001",
+      "isInTransit": false,
+      "quantity": 200,
+      "finalScore": -3,
+      "batchComposition": {
+         "organic_cotton": 50,
+         "polyamide6": 50
+      },
+      "traceability": [
+         {
+            "ID": "p-101",
+            "activityEndDate": "2023-05-03T22:07:21.072Z",
+            "activityStartDate": "2022-09-12T11:45:26.371Z",
+            "docType": "p",
+            "inputBatches": {
+               "b-101": {
+                  "batch": {
+                     "ID": "b-101",
+                     "batchComposition": {
+                        "organic_cotton": 100
+                     },
+                     "batchInternalID": "b-101-iid",
+                     "batchType": "ORGANIC_COTTON",
+                     "docType": "b",
+                     "finalScore": -3,
+                     "isInTransit": false,
+                     "latestOwner": "InovafilMSP:PU1",
+                     "quantity": 100,
+                     "supplierID": "suppl-001",
+                     "traceability": [
+                        {
+                           "ID": "rg-101",
+                           "activityDate": "2023-05-03T22:04:44.867Z",
+                           "docType": "rg",
+                           "issuer": "x509::CN=operator,OU=client::CN=ca.inovafil.stvgd.com,O=inovafil.stvgd.com,L=San Francisco,ST=California,C=US",
+                           "newBatch": {
+                              "ID": "b-101",
+                              "batchComposition": {
+                                 "organic_cotton": 100
+                              },
+                              "batchInternalID": "b-101-iid",
+                              "batchType": "ORGANIC_COTTON",
+                              "docType": "b",
+                              "finalScore": -3,
+                              "isInTransit": false,
+                              "latestOwner": "InovafilMSP:PU1",
+                              "quantity": 100,
+                              "supplierID": "suppl-001"
+                           },
+                           "productionUnitID": "InovafilMSP:PU1"
+                        }
+                     ]
+                  },
+                  "quantity": 100
+               },
+               "b-102": {
+                  "batch": {
+                     "ID": "b-102",
+                     "batchComposition": {
+                        "polyamide6": 100
+                     },
+                     "batchInternalID": "b-102-iid",
+                     "batchType": "POLYAMIDE_6",
+                     "docType": "b",
+                     "finalScore": -3,
+                     "isInTransit": false,
+                     "latestOwner": "InovafilMSP:PU1",
+                     "quantity": 100,
+                     "supplierID": "suppl-001",
+                     "traceability": [
+                        {
+                           "ID": "rg-102",
+                           "activityDate": "2023-05-03T22:06:48.375Z",
+                           "docType": "rg",
+                           "issuer": "x509::CN=operator,OU=client::CN=ca.inovafil.stvgd.com,O=inovafil.stvgd.com,L=San Francisco,ST=California,C=US",
+                           "newBatch": {
+                              "ID": "b-102",
+                              "batchComposition": {
+                                 "polyamide6": 100
+                              },
+                              "batchInternalID": "b-102-iid",
+                              "batchType": "POLYAMIDE_6",
+                              "docType": "b",
+                              "finalScore": -3,
+                              "isInTransit": false,
+                              "latestOwner": "InovafilMSP:PU1",
+                              "quantity": 100,
+                              "supplierID": "suppl-001"
+                           },
+                           "productionUnitID": "InovafilMSP:PU1"
+                        }
+                     ]
+                  },
+                  "quantity": 100
+               }
+            },
+            "issuer": "x509::CN=operator,OU=client::CN=ca.inovafil.stvgd.com,O=inovafil.stvgd.com,L=San Francisco,ST=California,C=US",
+            "outputBatch": {
+               "ID": "b-103",
+               "batchComposition": {
+                  "organic_cotton": 50,
+                  "polyamide6": 50
+               },
+               "batchInternalID": "b-103-iid",
+               "batchType": "YARN",
+               "docType": "b",
+               "finalScore": -3,
+               "isInTransit": false,
+               "latestOwner": "InovafilMSP:PU1",
+               "quantity": 200,
+               "supplierID": "suppl-001"
+            },
+            "productionScore": -1,
+            "productionType": "SPINNING",
+            "productionUnitID": "InovafilMSP:PU1",
+            "ses": -9
+         }
+      ]
+   }
+}

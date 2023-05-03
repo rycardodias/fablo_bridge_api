@@ -47,7 +47,7 @@ router.post('/insert', async (req: Request, res: Response<RequestResponse>, next
         const data = {
             method: "StvgdContract:CreateProduction",
             args: [productionID, productionUnitInternalID, productionType, activityStartDate, batchID,
-                batchType, batchInternalID, supplierID, unit, JSON.stringify(inputBatches),
+                batchType, batchInternalID, supplierID,  JSON.stringify(inputBatches),
                 JSON.stringify(batchComposition), quantity, finalScore, productionScore, ses]
         }
 
@@ -55,8 +55,10 @@ router.post('/insert', async (req: Request, res: Response<RequestResponse>, next
 
         return res.status(200).json({ data: request.data.response })
     } catch (error: any) {
+        console.log(error)
         return res.status(400).json({ error: error })
     }
 });
 
 module.exports = router
+

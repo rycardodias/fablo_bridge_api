@@ -46,13 +46,14 @@ router.post('/insert', async (req: Request, res: Response<RequestResponse>, next
         const data = {
             method: "StvgdContract:CreateReception",
             args: [receptionID, productionUnitInternalID, activityDate, receivedBatchID, newBatchID,
-                newBatchInternalID, isAccepted, transportScore, ses, distance]
+                newBatchInternalID, isAccepted, transportScore, ses, distance, '1'] //FIXME: remover parametro hardcode do cost
         }
 
         const request = await fabloChannelRequest(req, 'invoke', data)
 
         return res.status(200).json({ data: request.data.response })
     } catch (error: any) {
+        console.log(error)
         return res.status(400).json({ error: error })
     }
 });
