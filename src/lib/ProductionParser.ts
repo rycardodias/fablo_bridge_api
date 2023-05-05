@@ -21,6 +21,11 @@ export default function ProductionParser(info: ProductionType): object {
 
         // let key: string = Object.keys(info.inputBatches)[0].toString();
 
+        // Object.keys(info.inputBatches).map(key => {
+        //     console.log(info.inputBatches[key].batch.batchComposition = undefined)
+        // })
+
+
         return info.inputBatches//[key].batch
 
     } catch (error) {

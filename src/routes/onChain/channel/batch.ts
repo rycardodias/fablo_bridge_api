@@ -8,7 +8,7 @@ import BatchParser from "../../../lib/BatchParser";
 import RegistrationParser from "../../../lib/RegistrationParser";
 import ReceptionParser from "../../../lib/ReceptionParser";
 import TransportationParser from "../../../lib/TransportationParser";
-import ParserHandler from "../../../lib/ParserHandler";
+import ParserHandler, { geral } from "../../../lib/ParserHandler";
 
 router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
@@ -95,7 +95,8 @@ router.get('/simplified', async (req: Request, res: Response<RequestResponse>, n
             ParserHandler(item)
         })
 
-        return res.status(200).json({ data: info })
+
+        return res.status(200).json({ data: geral })
     } catch (error: any) {
         console.log(error)
         return res.status(400).json({ error })
