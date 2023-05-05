@@ -34,7 +34,7 @@ export default async function fabloRequest(req: Request, method: string, url: st
                 authorization: token ? `Bearer ${token}` : undefined
             },
             method: method,
-            baseURL: "http://20.224.242.57:"  // "http://127.0.0.1:" 
+            baseURL: "http://127.0.0.1:"  //"http://20.224.242.57:"  // "http://127.0.0.1:" 
                 + PORTS.find(item => item.company === req.session.user.companyId)!.port,
             url: url,
             data: data
