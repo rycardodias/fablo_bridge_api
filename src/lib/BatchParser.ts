@@ -12,11 +12,11 @@ type BatchType = {
 }
 
 
-export default function BatchParser(info: BatchType): object {
+export default function BatchParser(info: BatchType): object | undefined {
     try {
         if (info.docType !== "b") throw new Error("O tipo de documento fornecido é inválido. O valor esperado é 'b'.");
 
-        if (!info.traceability) return {}
+        if (!info.traceability) return
 
         return info.traceability[0]
 

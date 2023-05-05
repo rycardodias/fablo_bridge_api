@@ -1,0 +1,78 @@
+{
+   "data": [
+      {
+         "docType": "b",
+         "ID": "b-200",
+         "batchType": "ORGANIC_COTTON",
+         "latestOwner": "InovafilMSP:PU1",
+         "batchInternalID": "b-200-iid",
+         "supplierID": "suppl-001",
+         "isInTransit": false,
+         "quantity": 100,
+         "finalScore": -3,
+         "batchComposition": {
+            "organic_cotton": 100
+         },
+         "traceability": [
+            {
+               "ID": "rg-200",
+               "activityDate": "2023-05-05T13:52:11.007Z",
+               "docType": "rg",
+               "issuer": "x509::CN=operator,OU=client::CN=ca.inovafil.stvgd.com,O=inovafil.stvgd.com,L=San Francisco,ST=California,C=US",
+               "newBatch": {
+                  "ID": "b-200",
+                  "batchComposition": {
+                     "organic_cotton": 100
+                  },
+                  "batchInternalID": "b-200-iid",
+                  "batchType": "ORGANIC_COTTON",
+                  "docType": "b",
+                  "finalScore": -3,
+                  "isInTransit": false,
+                  "latestOwner": "InovafilMSP:PU1",
+                  "quantity": 100,
+                  "supplierID": "suppl-001"
+               },
+               "productionUnitID": "InovafilMSP:PU1"
+            }
+         ]
+      },
+      {
+         "docType": "b",
+         "ID": "b-201",
+         "batchType": "POLYAMIDE_6",
+         "latestOwner": "InovafilMSP:PU1",
+         "batchInternalID": "b-201-iid",
+         "supplierID": "suppl-001",
+         "isInTransit": false,
+         "quantity": 100,
+         "finalScore": -3,
+         "batchComposition": {
+            "polyamide6": 100
+         },
+         "traceability": [
+            {
+               "ID": "rg-201",
+               "activityDate": "2023-05-05T13:52:18.304Z",
+               "docType": "rg",
+               "issuer": "x509::CN=operator,OU=client::CN=ca.inovafil.stvgd.com,O=inovafil.stvgd.com,L=San Francisco,ST=California,C=US",
+               "newBatch": {
+                  "ID": "b-201",
+                  "batchComposition": {
+                     "polyamide6": 100
+                  },
+                  "batchInternalID": "b-201-iid",
+                  "batchType": "POLYAMIDE_6",
+                  "docType": "b",
+                  "finalScore": -3,
+                  "isInTransit": false,
+                  "latestOwner": "InovafilMSP:PU1",
+                  "quantity": 100,
+                  "supplierID": "suppl-001"
+               },
+               "productionUnitID": "InovafilMSP:PU1"
+            }
+         ]
+      }
+   ]
+}

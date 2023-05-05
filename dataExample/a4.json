@@ -2,6 +2,131 @@
    "data": [
       {
          "docType": "b",
+         "ID": "b-202-leftover",
+         "batchType": "YARN",
+         "latestOwner": "InovafilMSP:PU1",
+         "batchInternalID": "b-202-iid",
+         "supplierID": "suppl-001",
+         "isInTransit": false,
+         "quantity": 100,
+         "finalScore": -3,
+         "batchComposition": {
+            "organic_cotton": 50,
+            "polyamide6": 50
+         },
+         "traceability": [
+            {
+               "ID": "p-200",
+               "activityEndDate": "2023-05-05T13:54:10.702Z",
+               "activityStartDate": "2022-09-12T11:45:26.371Z",
+               "docType": "p",
+               "inputBatches": {
+                  "b-200": {
+                     "batch": {
+                        "ID": "b-200",
+                        "batchComposition": {
+                           "organic_cotton": 100
+                        },
+                        "batchInternalID": "b-200-iid",
+                        "batchType": "ORGANIC_COTTON",
+                        "docType": "b",
+                        "finalScore": -3,
+                        "isInTransit": false,
+                        "latestOwner": "InovafilMSP:PU1",
+                        "quantity": 100,
+                        "supplierID": "suppl-001",
+                        "traceability": [
+                           {
+                              "ID": "rg-200",
+                              "activityDate": "2023-05-05T13:52:11.007Z",
+                              "docType": "rg",
+                              "issuer": "x509::CN=operator,OU=client::CN=ca.inovafil.stvgd.com,O=inovafil.stvgd.com,L=San Francisco,ST=California,C=US",
+                              "newBatch": {
+                                 "ID": "b-200",
+                                 "batchComposition": {
+                                    "organic_cotton": 100
+                                 },
+                                 "batchInternalID": "b-200-iid",
+                                 "batchType": "ORGANIC_COTTON",
+                                 "docType": "b",
+                                 "finalScore": -3,
+                                 "isInTransit": false,
+                                 "latestOwner": "InovafilMSP:PU1",
+                                 "quantity": 100,
+                                 "supplierID": "suppl-001"
+                              },
+                              "productionUnitID": "InovafilMSP:PU1"
+                           }
+                        ]
+                     },
+                     "quantity": 100
+                  },
+                  "b-201": {
+                     "batch": {
+                        "ID": "b-201",
+                        "batchComposition": {
+                           "polyamide6": 100
+                        },
+                        "batchInternalID": "b-201-iid",
+                        "batchType": "POLYAMIDE_6",
+                        "docType": "b",
+                        "finalScore": -3,
+                        "isInTransit": false,
+                        "latestOwner": "InovafilMSP:PU1",
+                        "quantity": 100,
+                        "supplierID": "suppl-001",
+                        "traceability": [
+                           {
+                              "ID": "rg-201",
+                              "activityDate": "2023-05-05T13:52:18.304Z",
+                              "docType": "rg",
+                              "issuer": "x509::CN=operator,OU=client::CN=ca.inovafil.stvgd.com,O=inovafil.stvgd.com,L=San Francisco,ST=California,C=US",
+                              "newBatch": {
+                                 "ID": "b-201",
+                                 "batchComposition": {
+                                    "polyamide6": 100
+                                 },
+                                 "batchInternalID": "b-201-iid",
+                                 "batchType": "POLYAMIDE_6",
+                                 "docType": "b",
+                                 "finalScore": -3,
+                                 "isInTransit": false,
+                                 "latestOwner": "InovafilMSP:PU1",
+                                 "quantity": 100,
+                                 "supplierID": "suppl-001"
+                              },
+                              "productionUnitID": "InovafilMSP:PU1"
+                           }
+                        ]
+                     },
+                     "quantity": 100
+                  }
+               },
+               "issuer": "x509::CN=operator,OU=client::CN=ca.inovafil.stvgd.com,O=inovafil.stvgd.com,L=San Francisco,ST=California,C=US",
+               "outputBatch": {
+                  "ID": "b-202",
+                  "batchComposition": {
+                     "organic_cotton": 50,
+                     "polyamide6": 50
+                  },
+                  "batchInternalID": "b-202-iid",
+                  "batchType": "YARN",
+                  "docType": "b",
+                  "finalScore": -3,
+                  "isInTransit": false,
+                  "latestOwner": "InovafilMSP:PU1",
+                  "quantity": 200,
+                  "supplierID": "suppl-001"
+               },
+               "productionScore": -1,
+               "productionType": "SPINNING",
+               "productionUnitID": "InovafilMSP:PU1",
+               "ses": -9
+            }
+         ]
+      },
+      {
+         "docType": "b",
          "ID": "b-203",
          "batchType": "YARN",
          "latestOwner": "ASampaioMSP:PU1",
@@ -17,9 +142,11 @@
          "traceability": [
             {
                "ID": "rc-200",
+               "activityDate": "2023-05-05T14:29:16.659Z",
                "distance": 150,
                "docType": "rc",
                "isAccepted": true,
+               "issuer": "x509::CN=admin,OU=client::CN=ca.asampaio.stvgd.com,O=asampaio.stvgd.com,L=San Francisco,ST=California,C=US",
                "newBatch": {
                   "ID": "b-203",
                   "batchComposition": {
@@ -53,6 +180,7 @@
                   "traceability": [
                      {
                         "ID": "t-200",
+                        "activityDate": "2023-05-05T14:01:22.914Z",
                         "destinationProductionUnitID": "ASampaioMSP:PU1",
                         "docType": "t",
                         "inputBatch": {
@@ -95,7 +223,9 @@
                                                 "traceability": [
                                                    {
                                                       "ID": "rg-200",
+                                                      "activityDate": "2023-05-05T13:52:11.007Z",
                                                       "docType": "rg",
+                                                      "issuer": "x509::CN=operator,OU=client::CN=ca.inovafil.stvgd.com,O=inovafil.stvgd.com,L=San Francisco,ST=California,C=US",
                                                       "newBatch": {
                                                          "ID": "b-200",
                                                          "batchComposition": {
@@ -133,7 +263,9 @@
                                                 "traceability": [
                                                    {
                                                       "ID": "rg-201",
+                                                      "activityDate": "2023-05-05T13:52:18.304Z",
                                                       "docType": "rg",
+                                                      "issuer": "x509::CN=operator,OU=client::CN=ca.inovafil.stvgd.com,O=inovafil.stvgd.com,L=San Francisco,ST=California,C=US",
                                                       "newBatch": {
                                                          "ID": "b-201",
                                                          "batchComposition": {
@@ -155,6 +287,7 @@
                                              "quantity": 100
                                           }
                                        },
+                                       "issuer": "x509::CN=operator,OU=client::CN=ca.inovafil.stvgd.com,O=inovafil.stvgd.com,L=San Francisco,ST=California,C=US",
                                        "outputBatch": {
                                           "ID": "b-202",
                                           "batchComposition": {
@@ -181,6 +314,7 @@
                            }
                         },
                         "isReturn": false,
+                        "issuer": "x509::CN=operator,OU=client::CN=ca.inovafil.stvgd.com,O=inovafil.stvgd.com,L=San Francisco,ST=California,C=US",
                         "originProductionUnitID": "InovafilMSP:PU1",
                         "transportationType": "TERRESTRIAL_SMALL"
                      }

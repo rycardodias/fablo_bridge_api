@@ -9,21 +9,22 @@ export let geral = [{}]
 export default function ParserHandler(info: any): object {
     try {
         let result;
-        
+
+        if (info.ID.includes("leftover")) return {}
+
         switch (info.docType) {
             case 'b':
                 result = BatchParser(info)
-                geral.push(result)
-                ParserHandler(result);
+
+                if (result) {
+                    geral.push(result)
+                    ParserHandler(result);
+                }
                 break;
             case 'p':
                 let resultP: { [key: string]: any } = ProductionParser(info)
 
-                Object.keys(resultP).forEach(key => {
-                    geral.push(resultP)
-                    ParserHandler(resultP[key].batch);
-                })
-
+                Object.keys(resultP).forEach(key => ParserHandler(resultP[key].batch))
                 break;
             case 'rc':
                 result = ReceptionParser(info)
@@ -32,12 +33,13 @@ export default function ParserHandler(info: any): object {
                 break;
             case 'rg':
                 result = RegistrationParser(info)
-                geral.push(result)
+                // geral.push(result)
                 ParserHandler(result);
                 break;
             case 't':
+                console.log("T " + info.ID)
                 result = TransportationParser(info)
-                geral.push(result)
+                // geral.push(result)
                 ParserHandler(result);
                 break;
             default:
@@ -45,11 +47,7 @@ export default function ParserHandler(info: any): object {
                 break;
         }
 
-        //@ts-ignore
-       
-
         return { result }
-
 
     } catch (error) {
         return { error }
