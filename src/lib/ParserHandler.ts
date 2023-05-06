@@ -4,12 +4,16 @@ import ReceptionParser from "./ReceptionParser";
 import RegistrationParser from "./RegistrationParser";
 import TransportationParser from "./TransportationParser";
 
-type NodeTypes = {
+type NodeType = {
     ID: string;
 }
 
-export let nodes: Array<NodeTypes> = []
-export let arcs: Array<object> = []
+type ArcsType = {
+    ID: string;
+}
+
+export let nodes: Array<NodeType> = []
+export let arcs: Array<ArcsType> = []
 
 export default function ParserHandler(info: any) {
     try {
@@ -74,8 +78,12 @@ export default function ParserHandler(info: any) {
         const uniqueNodes = nodes.filter((node, index) => {
             return index === nodes.findIndex((n) => n.ID === node.ID);
         });
+        const uniqueArcs = arcs.filter((node, index) => {
+            return index === arcs.findIndex((n) => n.ID === node.ID);
+        });
 
         nodes = uniqueNodes
+        arcs = uniqueArcs
 
     } catch (error) {
         console.error(error);

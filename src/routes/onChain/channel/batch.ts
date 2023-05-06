@@ -80,16 +80,17 @@ router.delete('/deleteAllBatches', async (req: Request, res: Response<RequestRes
     }
 });
 
-router.get('/simplified', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+router.get('/graphMode', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const data = {
             method: "StvgdContract:GetAvailableBatches",
             args: []
         }
 
-        // const request = await fabloChannelRequest(req, 'query', data)
+        const request = await fabloChannelRequest(req, 'query', data)
 
-        let info = sampleData.data
+        console.log(request.data.response)
+        let info = request.data.response
 
         await info.map((item: any) => {
             ParserHandler(item)
