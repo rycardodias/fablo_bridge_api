@@ -15,78 +15,85 @@ type ArcsType = {
 export let nodes: Array<NodeType> = []
 export let arcs: Array<ArcsType> = []
 
+function registrationProcedure(info: any): void {
+    RegistrationParser(info)
+
+    info.newBatch = { [info.newBatch.ID]: info.newBatch.quantity }
+    arcs.push(info);
+}
+
+function receptionProcedure(info: any): void {
+    const result = ReceptionParser(info)
+    ParserHandler(result);
+
+    info.receivedBatch = { [info.receivedBatch.ID]: info.receivedBatch.quantity };
+    info.newBatch = { [info.newBatch.ID]: info.newBatch.quantity };
+    arcs.push(info)
+}
+
+function transportationProcedure(info: any): void {
+    const result = TransportationParser(info)
+    ParserHandler(result);
+
+    Object.keys(info.inputBatch).map(key => {
+        info.inputBatch[key] = info.inputBatch[key].quantity
+    })
+
+    arcs.push(info)
+}
+function productionProcedure(info: any): void {
+    let resultP: { [key: string]: any } = ProductionParser(info)
+
+    Object.keys(resultP).forEach(key => ParserHandler(resultP[key].batch))
+
+    Object.keys(info.inputBatches).map(key => {
+        info.inputBatches[key] = info.inputBatches[key].quantity
+    })
+    info.outputBatch = info.outputBatch.ID
+
+    arcs.push(info)
+}
+function batchProcedure(info: any): void {
+    const result = BatchParser(info)
+
+    info.traceability = undefined;
+    nodes.push(info)
+
+    if (result) {
+        ParserHandler(result);
+    }
+}
+
 export default function ParserHandler(info: any) {
     try {
-        let result;
-
         switch (info.docType) {
             case 'rg':
-                result = RegistrationParser(info)
-                // ParserHandler(result);
-
-                info.newBatch = { [info.newBatch.ID]: info.newBatch.quantity }
-
-                arcs.push(info);
-
+                registrationProcedure(info)
                 break;
             case 'rc':
-                result = ReceptionParser(info)
-                ParserHandler(result);
-
-                info.receivedBatch = { [info.receivedBatch.ID]: info.receivedBatch.quantity };
-                info.newBatch = { [info.newBatch.ID]: info.newBatch.quantity };
-                arcs.push(info)
+                receptionProcedure(info)
                 break;
             case 't':
-                result = TransportationParser(info)
-                ParserHandler(result);
-
-                Object.keys(info.inputBatch).map(key => {
-                    info.inputBatch[key] = info.inputBatch[key].quantity
-                })
-
-                arcs.push(info)
-
+                transportationProcedure(info)
                 break;
             case 'p':
-                let resultP: { [key: string]: any } = ProductionParser(info)
-
-                Object.keys(resultP).forEach(key => ParserHandler(resultP[key].batch))
-
-                Object.keys(info.inputBatches).map(key => {
-                    info.inputBatches[key] = info.inputBatches[key].quantity
-                })
-                info.outputBatch = info.outputBatch.ID
-
-                arcs.push(info)
-
+                productionProcedure(info)
                 break;
             case 'b':
-                result = BatchParser(info)
-
-                info.traceability = undefined;
-                nodes.push(info)
-
-                if (result) {
-                    ParserHandler(result);
-                }
+                batchProcedure(info)
                 break;
             default:
                 throw new Error("Invalid doc type: " + info.docType);
         }
 
-        const uniqueNodes = nodes.filter((node, index) => {
+        nodes = nodes.filter((node, index) => {
             return index === nodes.findIndex((n) => n.ID === node.ID);
         });
-        const uniqueArcs = arcs.filter((node, index) => {
+        arcs = arcs.filter((node, index) => {
             return index === arcs.findIndex((n) => n.ID === node.ID);
         });
-
-        nodes = uniqueNodes
-        arcs = uniqueArcs
 
     } catch (error) {
         console.error(error);
     }
-
 }
