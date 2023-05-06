@@ -28,7 +28,6 @@ export default async function fabloRequest(req: Request, method: string, url: st
                 port: '8803'
             },
         ]
-
         const request = await axios({
             headers: {
                 authorization: token ? `Bearer ${token}` : undefined

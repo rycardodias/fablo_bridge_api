@@ -8,7 +8,7 @@ import BatchParser from "../../../lib/BatchParser";
 import RegistrationParser from "../../../lib/RegistrationParser";
 import ReceptionParser from "../../../lib/ReceptionParser";
 import TransportationParser from "../../../lib/TransportationParser";
-import ParserHandler, { geral } from "../../../lib/ParserHandler";
+import ParserHandler, { arcs, nodes } from "../../../lib/ParserHandler";
 
 router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
@@ -89,14 +89,13 @@ router.get('/simplified', async (req: Request, res: Response<RequestResponse>, n
 
         // const request = await fabloChannelRequest(req, 'query', data)
 
-        let info = sampleData.data//[0].traceability[0].inputBatch["b-152"].batch.traceability[0].inputBatches["b-151"].batch//.traceability[0] //request.data.response
+        let info = sampleData.data
 
         await info.map((item: any) => {
             ParserHandler(item)
         })
 
-
-        return res.status(200).json({ data: geral })
+        return res.status(200).json({ data: { nodes, arcs } })
     } catch (error: any) {
         console.log(error)
         return res.status(400).json({ error })

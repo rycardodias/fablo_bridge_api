@@ -47,12 +47,11 @@ router.post('/insert', async (req: Request, res: Response<RequestResponse>, next
                 supplierID, quantity, finalScore, JSON.stringify(batchComposition)]
         }
 
-        console.log(data)
-
         const request = await fabloChannelRequest(req, 'invoke', data)
 
         return res.status(200).json({ data: request.data.response })
     } catch (error: any) {
+        // console.log(error)
         return res.status(400).json({ error: error })
     }
 });

@@ -41,13 +41,13 @@ router.get('/getById/:id', async (req: Request, res: Response<RequestResponse>, 
 router.post('/insert', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const { productionID, productionUnitInternalID, productionType, activityStartDate, batchID,
-            batchType, batchInternalID, supplierID, unit, inputBatches, batchComposition, quantity,
+            batchType, batchInternalID, supplierID, inputBatches, batchComposition, quantity,
             finalScore, productionScore, ses } = req.body;
 
         const data = {
             method: "StvgdContract:CreateProduction",
             args: [productionID, productionUnitInternalID, productionType, activityStartDate, batchID,
-                batchType, batchInternalID, supplierID,  JSON.stringify(inputBatches),
+                batchType, batchInternalID, supplierID, JSON.stringify(inputBatches),
                 JSON.stringify(batchComposition), quantity, finalScore, productionScore, ses]
         }
 
