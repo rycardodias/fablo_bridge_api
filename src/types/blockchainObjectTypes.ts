@@ -37,7 +37,7 @@ export type RegistrationType = {
         },
         batchInternalID: any,
         batchType: any,
-        docType: any,
+        docType: "rg",
         finalScore: any,
         isInTransit: boolean,
         latestOwner: any,
@@ -54,9 +54,13 @@ export type ReceptionType = {
     docType: any,
     isAccepted: any,
     issuer: any,
-    newBatch: object,
+    newBatch: {
+        ID: string,
+    },
     productionUnitID: any,
-    receivedBatch: object,
+    receivedBatch: {
+        ID: string,
+    },
     ses: any,
     transportScore: any
 }
