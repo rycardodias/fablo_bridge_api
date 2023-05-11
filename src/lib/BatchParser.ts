@@ -1,16 +1,5 @@
-type BatchType = {
-    ID: any,
-    batchInternalID: any,
-    batchType: any,
-    docType: any,
-    finalScore: any,
-    isInTransit: boolean,
-    latestOwner: any,
-    quantity: any,
-    supplierID: any
-    traceability: Array<any>
-}
 
+import { BatchType } from "../types/blockchainObjectTypes";
 
 export default function BatchParser(info: BatchType): any | undefined {
     try {

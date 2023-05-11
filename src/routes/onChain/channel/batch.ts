@@ -3,11 +3,6 @@ import { fabloChannelRequest } from "../../../config/fabloApi";
 import RequestResponse from '../../../interfaces/RequestResponse'
 const router = express.Router();
 
-import sampleData from '../../../../dataExample/afterTransport2.json'
-import BatchParser from "../../../lib/BatchParser";
-import RegistrationParser from "../../../lib/RegistrationParser";
-import ReceptionParser from "../../../lib/ReceptionParser";
-import TransportationParser from "../../../lib/TransportationParser";
 import ParserHandler, { arcs, nodes } from "../../../lib/ParserHandler";
 
 router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
@@ -89,7 +84,6 @@ router.get('/graphMode', async (req: Request, res: Response<RequestResponse>, ne
 
         const request = await fabloChannelRequest(req, 'query', data)
 
-        console.log(request.data.response)
         let info = request.data.response
 
         await info.map((item: any) => {

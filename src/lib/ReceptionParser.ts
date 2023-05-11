@@ -1,16 +1,4 @@
-type ReceptionType = {
-    ID: any,
-    activityDate: any,
-    distance: any,
-    docType: any,
-    isAccepted: any,
-    issuer: any,
-    newBatch: object,
-    productionUnitID: any,
-    receivedBatch: object,
-    ses: any,
-    transportScore: any
-}
+import { ReceptionType } from "../types/blockchainObjectTypes";
 
 export default function ReceptionParser(info: ReceptionType): object {
     try {

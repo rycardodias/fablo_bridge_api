@@ -4,16 +4,11 @@ import ReceptionParser from "./ReceptionParser";
 import RegistrationParser from "./RegistrationParser";
 import TransportationParser from "./TransportationParser";
 
-type NodeType = {
-    ID: string;
-}
-
-type ArcsType = {
-    ID: string;
-}
+import type { NodeType, ArcType } from "../types/TraceabilityTypes";
+import type { BatchType } from "../types/blockchainObjectTypes";
 
 export let nodes: Array<NodeType> = []
-export let arcs: Array<ArcsType> = []
+export let arcs: Array<ArcType> = []
 
 function registrationProcedure(info: any): void {
     RegistrationParser(info)
@@ -57,11 +52,39 @@ function batchProcedure(info: any): void {
     const result = BatchParser(info)
 
     info.traceability = undefined;
-    nodes.push(info)
+
+
+
+    nodes.push(addCoordinatesToBatch(info))
 
     if (result) {
         ParserHandler(result);
     }
+}
+
+function addCoordinatesToBatch(batch: BatchType): NodeType {
+    let node: NodeType = { ...batch, lat: 0, lng: 0 };
+
+    switch (batch.latestOwner) {
+        case "InovafilMSP:PU1":
+            node = { ...node, lat: 41.6946, lng: -8.83016 }
+            break;
+        case "ASampaioMSP:PU1":
+            node = { ...node, lat: 41.6946, lng: -8 }
+
+            break;
+        case "TintexMSP:PU1":
+            node = { ...node, lat: 41.1, lng: -8.83016 }
+
+            break;
+        case "TMGMSP:PU1":
+            node = { ...node, lat: 41.0, lng: -8.0 }
+            break;
+        default:
+            console.log("error: invalid owner: " + batch.latestOwner)
+    }
+
+    return node
 }
 
 export default function ParserHandler(info: any) {

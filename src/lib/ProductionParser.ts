@@ -1,19 +1,4 @@
-type ProductionType = {
-    ID: any,
-    activityStartDate: any,
-    activityEndDate: any,
-    docType: any,
-    inputBatches: {
-        [key: string]: any
-    },
-    issuer: any,
-    outputBatch: object,
-    productionScore: any,
-    productionType: object,
-    ses: any,
-    productionUnitID: any
-}
-
+import { ProductionType } from "../types/blockchainObjectTypes";
 
 export default function ProductionParser(info: ProductionType): object {
     try {

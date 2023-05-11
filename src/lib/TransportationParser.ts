@@ -1,16 +1,4 @@
-type TransportationType = {
-    ID: any,
-    activityDate: any,
-    destinationProductionUnitID: any,
-    docType: any,
-    inputBatch: {
-        [key: string]: Record<string, any>
-    }
-    isReturn: boolean,
-    issuer: any,
-    originProductionUnitID: any,
-    transportationType: any
-}
+import { TransportationType } from "../types/blockchainObjectTypes";
 
 export default function TransportationParser(info: TransportationType): object {
     try {
