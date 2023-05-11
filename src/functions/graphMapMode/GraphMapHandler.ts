@@ -1,5 +1,7 @@
+import MapInfoInterface from "../../interfaces/MapInfoInterface";
 import type { NodeType, ArcType } from "../../types/TraceabilityTypes";
-import type { BatchType, ReceptionType, RegistrationType, TransportationType } from "../../types/blockchainObjectTypes";
+import type { BatchType, ProductionType, ReceptionType, RegistrationType, TransportationType } from "../../types/blockchainObjectTypes";
+import coordinatesHandler from "../coordinatesHandler";
 
 let nodes: Array<any> = []
 let arcs: Array<ArcType> = []
@@ -20,16 +22,24 @@ function batchProcedure(info: BatchType): void {
     }
 }
 
-function productionProcedure(info: any): void {
+function productionProcedure(info: ProductionType): void {
     try {
         if (info.docType !== "p") throw new Error("O tipo de documento fornecido é inválido. O valor esperado é 'rc'.");
 
         Object.keys(info.inputBatches).forEach(key => GraphMapHandler(info.inputBatches[key].batch))
 
-        Object.keys(info.inputBatches).forEach(key => info.inputBatches[key] = info.inputBatches[key].quantity)
-        info.outputBatch = { [info.outputBatch.ID]: info.outputBatch.quantity }
+        let newObject: MapInfoInterface & ProductionType = {
+            ...info,
+            mapInfo: { coordinates: coordinatesHandler(info.productionUnitID), inputBatches: [], outputBatches: [] }
+        }
 
-        setNodes(info)
+        newObject.mapInfo.inputBatches = Object.keys(info.inputBatches)
+        newObject.mapInfo.outputBatches = [newObject.outputBatch.ID]
+
+        Object.keys(newObject.inputBatches).forEach(key => newObject.inputBatches[key] = newObject.inputBatches[key].quantity)
+        newObject.outputBatch = { ID: info.outputBatch.ID }
+
+        setNodes(newObject)
     } catch (error) {
         console.error(error)
     }

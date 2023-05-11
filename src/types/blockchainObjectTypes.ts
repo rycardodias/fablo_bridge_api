@@ -1,8 +1,8 @@
 export type BatchType = {
-    ID: any,
+    ID: string,
     batchInternalID: any,
     batchType: any,
-    docType: any,
+    docType: 'b',
     finalScore: any,
     isInTransit: boolean,
     latestOwner: any,
@@ -12,21 +12,21 @@ export type BatchType = {
 }
 
 export type TransportationType = {
-    ID: any,
+    ID: string,
     activityDate: any,
-    destinationProductionUnitID: any,
-    docType: any,
+    destinationProductionUnitID: string,
+    docType: 't',
     inputBatch: {
         [key: string]: Record<string, any>
     }
     isReturn: boolean,
     issuer: any,
-    originProductionUnitID: any,
+    originProductionUnitID: string,
     transportationType: any
 }
 
 export type RegistrationType = {
-    ID: any,
+    ID: string,
     activityDate: any,
     docType: any,
     issuer: any,
@@ -44,20 +44,20 @@ export type RegistrationType = {
         quantity: any,
         supplierID: any,
     },
-    productionUnitID: any
+    productionUnitID: string
 }
 
 export type ReceptionType = {
-    ID: any,
+    ID: string,
     activityDate: any,
     distance: any,
-    docType: any,
+    docType: 'rc',
     isAccepted: any,
     issuer: any,
     newBatch: {
         ID: string,
     },
-    productionUnitID: any,
+    productionUnitID: string,
     receivedBatch: {
         ID: string,
     },
@@ -66,17 +66,19 @@ export type ReceptionType = {
 }
 
 export type ProductionType = {
-    ID: any,
+    ID: string,
     activityStartDate: any,
     activityEndDate: any,
-    docType: any,
+    docType: 'p',
     inputBatches: {
         [key: string]: any
     },
     issuer: any,
-    outputBatch: object,
+    outputBatch: {
+        ID: string,
+    },
     productionScore: any,
     productionType: object,
     ses: any,
-    productionUnitID: any
+    productionUnitID: string
 }

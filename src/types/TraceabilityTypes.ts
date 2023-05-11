@@ -8,3 +8,5 @@ export interface NodeType extends BatchType {
 export type ArcType = {
     ID: string;
 }
+
+
