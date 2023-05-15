@@ -4,8 +4,8 @@ import RequestResponse from '../../../interfaces/RequestResponse'
 const router = express.Router();
 import dataExample from '../../../../dataExample/afterTransport2.json'
 import ParserHandler, { arcs, nodes } from "../../../lib/ParserHandler";
-import GraphMapHandler from "../../../functions/graphMapMode/GraphMapHandler";
 import getTraceabilityMapData from "../../../functions/graphMapMode/GraphMapHandler";
+
 
 router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
@@ -106,13 +106,12 @@ router.get('/graphMapMode', async (req: Request, res: Response<RequestResponse>,
             args: []
         }
 
-        // const request = await fabloChannelRequest(req, 'query', data)
+        const request = await fabloChannelRequest(req, 'query', data)
 
-        let info = dataExample.data //request.data.response
+        let info = request.data.response
+        // let info = dataExample.data 
 
-        // await info.map((item: any) => {
         const result = getTraceabilityMapData(info)
-        // })
 
         return res.status(200).json({ data: result })
     } catch (error: any) {

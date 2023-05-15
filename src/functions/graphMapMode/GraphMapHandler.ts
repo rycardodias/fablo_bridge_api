@@ -17,8 +17,20 @@ function batchProcedure(info: BatchType): void {
         if (!info.traceability) return
 
         GraphMapHandler(info.traceability[0])
+
+        let newObject: MapInfoInterface & BatchType = {
+            ...info,
+            mapInfo: { coordinates: coordinatesHandler(info.latestOwner), input: [], output: [] }
+        }
+
+        newObject.mapInfo.input = []
+        newObject.mapInfo.output = []
+
+        newObject.traceability = []
+
+        setNodes(newObject)
     } catch (error) {
-        console.error(error)
+        throw error
     }
 }
 
@@ -30,18 +42,22 @@ function productionProcedure(info: ProductionType): void {
 
         let newObject: MapInfoInterface & ProductionType = {
             ...info,
-            mapInfo: { coordinates: coordinatesHandler(info.productionUnitID), inputBatches: [], outputBatches: [] }
+            mapInfo: { coordinates: coordinatesHandler(info.productionUnitID), input: [], output: [] }
         }
 
-        newObject.mapInfo.inputBatches = Object.keys(info.inputBatches)
-        newObject.mapInfo.outputBatches = [newObject.outputBatch.ID]
+        newObject.mapInfo.input = Object.keys(info.inputBatches)
+        newObject.mapInfo.output = [newObject.outputBatch.ID]
 
-        Object.keys(newObject.inputBatches).forEach(key => newObject.inputBatches[key] = newObject.inputBatches[key].quantity)
-        newObject.outputBatch = { ID: info.outputBatch.ID }
+        newObject.outputBatch = { ID: newObject.outputBatch.ID }
+
+        Object.keys(newObject.inputBatches).forEach(key => {
+            newObject.inputBatches[key] = newObject.inputBatches[key].quantity
+        }
+        )
 
         setNodes(newObject)
     } catch (error) {
-        console.error(error)
+        throw error
     }
 }
 
@@ -51,12 +67,21 @@ function receptionProcedure(info: ReceptionType): void {
 
         GraphMapHandler(info.receivedBatch)
 
-        info.newBatch = { ID: info.newBatch.ID }
-        info.receivedBatch = { ID: info.receivedBatch.ID }
-        setNodes(info)
+        let newObject: MapInfoInterface & ReceptionType = {
+            ...info,
+            mapInfo: { coordinates: coordinatesHandler(info.productionUnitID), input: [], output: [] }
+        }
+
+        newObject.mapInfo.input = [newObject.receivedBatch.ID]
+        newObject.mapInfo.output = [newObject.newBatch.ID]
+
+        newObject.newBatch = { ID: newObject.newBatch.ID }
+        newObject.receivedBatch = { ID: newObject.receivedBatch.ID }
+
+        setNodes(newObject)
 
     } catch (error) {
-        console.error(error)
+        throw error
     }
 }
 
@@ -64,14 +89,21 @@ function registrationProcedure(info: RegistrationType): void {
     try {
         if (info.docType !== "rg") throw new Error("O tipo de documento fornecido é inválido. O valor esperado é 'rg'.");
 
-        let newObject: any = info
 
-        newObject.newBatch = { ID: info.newBatch.ID };
+        let newObject: MapInfoInterface & RegistrationType = {
+            ...info,
+            mapInfo: { coordinates: coordinatesHandler(info.productionUnitID), input: [], output: [] }
+        }
+
+        newObject.mapInfo.input = []
+        newObject.mapInfo.output = [newObject.newBatch.ID]
+
+        newObject.newBatch = { ID: newObject.newBatch.ID }
 
         setNodes(newObject)
 
     } catch (error) {
-        console.error(error)
+        throw error
     }
 }
 
@@ -83,16 +115,27 @@ function transportationProcedure(info: TransportationType): void {
 
         GraphMapHandler(info.inputBatch[key].batch)
 
-        info.inputBatch[key] = info.inputBatch[key].quantity
+        let newObject: MapInfoInterface & TransportationType = {
+            ...info,
+            mapInfo: { coordinates: coordinatesHandler(info.originProductionUnitID), input: [], output: [] }
+        }
 
-        setNodes(info)
+        newObject.mapInfo.input = [key]
+        newObject.mapInfo.output = []
+
+        newObject.inputBatch = { ID: key }
+
+        setNodes(newObject)
 
     } catch (error) {
-        console.error(error)
+        throw error
     }
 }
 
 function GraphMapHandler(info: any) {
+    // console.log(info)
+
+    if (!info.docType) return
     try {
         switch (info.docType) {
             case 'rg':
@@ -111,7 +154,7 @@ function GraphMapHandler(info: any) {
                 batchProcedure(info)
                 break;
             default:
-                throw new Error("Invalid doc type: " + info.docType);
+                throw new Error("GraphMapHandler: Invalid doc type: " + info.docType);
         }
 
         nodes = nodes.filter((node, index) => {
@@ -122,14 +165,93 @@ function GraphMapHandler(info: any) {
         // });
 
     } catch (error) {
-        console.error(error);
+        console.log(error)
+        throw error;
     }
 }
 
-export default function getTraceabilityMapData(data: any): object {
+function calculateArcs(nodes: Array<any>): void {
+    nodes.forEach(node => {
+        node.mapInfo.output.forEach((element: Array<string>) => {
+
+            const initialNode = node.mapInfo.coordinates
+            const finalNode = nodes.find(filtered => filtered.ID === element).mapInfo.coordinates
+
+            arcs.push({
+                ID: node.ID + "-" + element,
+                activityConnection: false,
+                initialNode: { ID: node.ID, ...initialNode },
+                finalNode: { ID: element, ...finalNode }
+            })
+
+        });
+
+        node.mapInfo.input.forEach((element: Array<string>) => {
+
+            const finalNode = node.mapInfo.coordinates
+            const initialNode = nodes.find(filtered => filtered.ID === element).mapInfo.coordinates
+
+            arcs.push({
+                ID: element + "-" + node.ID,
+                activityConnection: false,
+                initialNode: { ID: element, ...initialNode },
+                finalNode: { ID: node.ID, ...finalNode }
+            })
+
+        });
+
+
+        // conectar output to input da atividade seguinte
+        node.mapInfo.output.forEach((element: any) => {
+
+            const initialNode = node.mapInfo.coordinates
+
+            let finalNode = nodes.filter((filtered: any) => filtered.mapInfo.input.includes(element))[0]
+
+            if (finalNode) {
+                arcs.push({
+                    ID: element + "-" + node.ID,
+                    activityConnection: true,
+                    initialNode: { ID: node.ID, ...initialNode },
+                    finalNode: { ID: finalNode.ID, ...finalNode.mapInfo.coordinates }
+                })
+            }
+
+        });
+
+
+        if (node.docType === 't') {
+            const initialNode = node.mapInfo.coordinates
+
+            let finalNode: any = nodes.filter((filteredDocType: any) => filteredDocType.docType === 'rc')
+                .filter(filterInput => filterInput.mapInfo.input[0] === node.mapInfo.input[0])[0]
+
+            console.log(finalNode)
+
+            if (finalNode) {
+                arcs.push({
+                    ID: node.ID + "-" + finalNode.ID,
+                    activityConnection: true,
+                    initialNode: { ID: node.ID, ...initialNode },
+                    finalNode: { ID: finalNode.ID, ...finalNode.mapInfo.coordinates }
+                })
+            }
+        }
+
+
+    })
+}
+
+
+export default function getTraceabilityMapData(data: any): { nodes: Object, arcs: Object } {
+    nodes = [];
+    arcs = [];
+
     data.map((item: any) => {
         GraphMapHandler(item)
     })
+
+    calculateArcs(nodes)
 
     return { nodes, arcs }
 }

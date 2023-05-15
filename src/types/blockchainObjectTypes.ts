@@ -17,7 +17,7 @@ export type TransportationType = {
     destinationProductionUnitID: string,
     docType: 't',
     inputBatch: {
-        [key: string]: Record<string, any>
+        [key: string]: any
     }
     isReturn: boolean,
     issuer: any,
@@ -28,21 +28,10 @@ export type TransportationType = {
 export type RegistrationType = {
     ID: string,
     activityDate: any,
-    docType: any,
+    docType: 'rg',
     issuer: any,
     newBatch: {
         ID: any,
-        batchComposition: {
-            [key: string]: number
-        },
-        batchInternalID: any,
-        batchType: any,
-        docType: "rg",
-        finalScore: any,
-        isInTransit: boolean,
-        latestOwner: any,
-        quantity: any,
-        supplierID: any,
     },
     productionUnitID: string
 }
