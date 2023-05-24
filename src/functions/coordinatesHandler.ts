@@ -8,25 +8,25 @@ export default function coordinatesHandler(productionUnitID: string): Coordinate
 
         switch (productionUnitID) {
             case "InovafilMSP:PU1":
-                coordinates = { lat: 41.6946, lng: -8.83016 }
+                coordinates = { lat: 41.693948, lng: -8.846876 }
                 break;
             case "ASampaioMSP:PU1":
-                coordinates = { lat: 41.0, lng: -8 }
+                coordinates = { lat: 41.643077, lng: -8.437478 }
 
                 break;
             case "TintexMSP:PU1":
-                coordinates = { lat: 40.0, lng: -7.5 }
+                coordinates = { lat: 41.464130, lng: -8.737813 }
 
                 break;
             case "TMGMSP:PU1":
-                coordinates = { lat: 39, lng: -9.5 }
+                coordinates = { lat: 41.382027, lng: -8.338981 }
                 break;
             default:
                 throw new Error("Invalid productionUnitID!");
         }
 
-        coordinates.lat += (Math.random() - 0.5) * 0.6
-        coordinates.lng += (Math.random() - 0.5) * 0.6
+        coordinates.lat += (Math.random() - 0.5) * 0.3
+        coordinates.lng += (Math.random() - 0.5) * 0.3
 
         return coordinates;
     } catch (error) {

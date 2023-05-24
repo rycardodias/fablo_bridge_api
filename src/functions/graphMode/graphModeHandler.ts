@@ -4,7 +4,7 @@ import type { BatchType, ProductionType, ReceptionType, RegistrationType, Transp
 import coordinatesHandler from "../coordinatesHandler";
 
 let nodes: Array<any> = []
-let arcs: Array<ArcType> = []
+let arcs: Array<any> = []
 
 function setNodes(node: any): void {
     nodes.push(node)
@@ -161,64 +161,55 @@ function GraphMapHandler(info: any) {
 
 function calculateArcs(nodes: Array<any>): void {
     nodes.forEach(node => {
-        node.mapInfo.output.forEach((element: Array<string>) => {
-            const initialNode = node.mapInfo.coordinates
-            const finalNode = nodes.find(filtered => filtered.ID === element).mapInfo.coordinates
+        if (node.docType === 'rg' || node.docType === 'p' || node.docType === 'rc') {
+
+            const finalNode = nodes.find(filtered => filtered.ID === node.mapInfo.output[0])
 
             arcs.push({
-                ID: node.ID + "-" + element,
+                ID: node.ID + "-" + finalNode.ID,
                 activityConnection: false,
-                initialNode: { ID: node.ID, ...initialNode },
-                finalNode: { ID: element, ...finalNode }
+                initialNode: node.ID,
+                finalNode: finalNode.ID,
             })
 
-            const finalNodeAtivity = nodes.filter((filtered: any) => filtered.mapInfo.input.includes(element))[0]
-
-            if (finalNodeAtivity) {
-                arcs.push({
-                    ID: element + "-" + node.ID,
-                    activityConnection: true,
-                    initialNode: { ID: node.ID, ...initialNode },
-                    finalNode: { ID: finalNodeAtivity.ID, ...finalNodeAtivity.mapInfo.coordinates }
+            if (node.docType === "p") {
+                node.mapInfo.input.forEach((element: Array<string>) => {
+                    arcs.push({
+                        ID: element + "-" + node.ID,
+                        activityConnection: true,
+                        initialNode: element,
+                        finalNode: node.ID
+                    })
                 })
             }
-        });
-
-        node.mapInfo.input.forEach((element: Array<string>) => {
-            const finalNode = node.mapInfo.coordinates
-            const initialNode = nodes.find(filtered => filtered.ID === element).mapInfo.coordinates
-
-            arcs.push({
-                ID: element + "-" + node.ID,
-                activityConnection: false,
-                initialNode: { ID: element, ...initialNode },
-                finalNode: { ID: node.ID, ...finalNode }
-            })
-        });
+        }
 
         if (node.docType === 't') {
-            const initialNode = node.mapInfo.coordinates
+            const finalNode = nodes
+                .filter(item => item.docType === 'rc')
+                .find(filtered => filtered.mapInfo.input[0] === node.mapInfo.input[0])
 
-            let finalNode: any = nodes.filter((filteredDocType: any) => filteredDocType.docType === 'rc')
-                .filter(filterInput => filterInput.mapInfo.input[0] === node.mapInfo.input[0])[0]
+            arcs.push({
+                ID: node.ID + "-" + finalNode.ID,
+                activityConnection: true,
+                initialNode: node.ID,
+                finalNode: finalNode.ID
+            })
 
-            if (finalNode) {
-                arcs.push({
-                    ID: node.ID + "-" + finalNode.ID,
-                    activityConnection: true,
-                    initialNode: { ID: node.ID, ...initialNode },
-                    finalNode: { ID: finalNode.ID, ...finalNode.mapInfo.coordinates }
-                })
-            }
+            arcs.push({
+                ID: node.mapInfo.input[0] + "-" + node.ID,
+                activityConnection: true,
+                initialNode: node.mapInfo.input[0],
+                finalNode: node.ID
+            })
         }
     })
 }
 
 
-export default function getTraceabilityMapData(data: any): { nodes: Array<any>, arcs: Array<any> } {
+export default function getTraceabilityData(data: any): { nodes: Array<any>, arcs: Array<any> } {
     nodes = [];
     arcs = [];
-
     data.map((item: any) => {
         GraphMapHandler(item)
     })
