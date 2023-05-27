@@ -160,56 +160,67 @@ function GraphMapHandler(info: any) {
 }
 
 function calculateArcs(nodes: Array<any>): void {
-    nodes.forEach(node => {
-        if (node.docType === 'rg' || node.docType === 'p' || node.docType === 'rc') {
+    try {
+        nodes.forEach(node => {
+            if (node.docType === 'rg' || node.docType === 'p' || node.docType === 'rc') {
 
-            const finalNode = nodes.find(filtered => filtered.ID === node.mapInfo.output[0])
+                const finalNode = nodes.find(filtered => filtered.ID === node.mapInfo.output[0])
 
-            arcs.push({
-                ID: node.ID + "-" + finalNode.ID,
-                activityConnection: false,
-                initialNode: node.ID,
-                finalNode: finalNode.ID,
-            })
+                arcs.push({
+                    ID: node.ID + "-" + finalNode.ID,
+                    activityConnection: false,
+                    initialNode: node.ID,
+                    finalNode: finalNode.ID,
+                })
 
-            if (node.docType === "p") {
-                node.mapInfo.input.forEach((element: Array<string>) => {
+                if (node.docType === "p") {
+                    node.mapInfo.input.forEach((element: Array<string>) => {
+                        arcs.push({
+                            ID: element + "-" + node.ID,
+                            activityConnection: true,
+                            initialNode: element,
+                            finalNode: node.ID
+                        })
+                    })
+                }
+            }
+
+            if (node.docType === 't') {
+
+                const finalNode = nodes
+                    .filter(item => item.docType === 'rc')
+                    .find(filtered => filtered.mapInfo.input[0] === node.mapInfo.input[0])
+
                     arcs.push({
-                        ID: element + "-" + node.ID,
+                        ID: node.ID + "-" + finalNode.ID,
                         activityConnection: true,
-                        initialNode: element,
+                        initialNode: node.ID,
+                        finalNode: finalNode.ID
+                    })
+
+                    arcs.push({
+                        ID: node.mapInfo.input[0] + "-" + node.ID,
+                        activityConnection: true,
+                        initialNode: node.mapInfo.input[0],
                         finalNode: node.ID
                     })
-                })
             }
-        }
+        })
 
-        if (node.docType === 't') {
-            const finalNode = nodes
-                .filter(item => item.docType === 'rc')
-                .find(filtered => filtered.mapInfo.input[0] === node.mapInfo.input[0])
+        
 
-            arcs.push({
-                ID: node.ID + "-" + finalNode.ID,
-                activityConnection: true,
-                initialNode: node.ID,
-                finalNode: finalNode.ID
-            })
-
-            arcs.push({
-                ID: node.mapInfo.input[0] + "-" + node.ID,
-                activityConnection: true,
-                initialNode: node.mapInfo.input[0],
-                finalNode: node.ID
-            })
-        }
-    })
+    } catch (error: any) {
+        console.log('calculateArcs', error.message)
+        throw error
+    }
 }
 
 
 export default function getTraceabilityData(data: any): { nodes: Array<any>, arcs: Array<any> } {
+    //é neste
     nodes = [];
     arcs = [];
+    
     data.map((item: any) => {
         GraphMapHandler(item)
     })

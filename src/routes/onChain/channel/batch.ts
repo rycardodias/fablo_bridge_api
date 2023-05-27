@@ -4,6 +4,8 @@ import RequestResponse from '../../../interfaces/RequestResponse'
 const router = express.Router();
 import getTraceabilityMapData from "../../../functions/graphMapMode/GraphMapHandler";
 import getTraceabilityData from "../../../functions/graphMode/graphModeHandler";
+import getTraceabilityDataById from "../../../functions/getTraceabilyByID";
+import getTraceabilityDataByIDHandler from "../../../functions/graphMode/graphModeHandlerID";
 
 
 router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
@@ -97,8 +99,11 @@ router.get('/graphMode', async (req: Request, res: Response<RequestResponse>, ne
     }
 });
 
-router.get('/graphMapMode', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+router.get('/graphModeID/:ID', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
+        const { ID } = req.params
+
+
         const data = {
             method: "StvgdContract:GetAvailableBatches",
             args: []
@@ -109,7 +114,54 @@ router.get('/graphMapMode', async (req: Request, res: Response<RequestResponse>,
         let info = request.data.response
         // let info = dataExample.data 
 
+        let infoByID = getTraceabilityDataById(info, ID)
+
+
+        const result = getTraceabilityDataByIDHandler([infoByID])
+
+        return res.status(200).json({ data: result })
+    } catch (error: any) {
+        return res.status(400).json({ error })
+    }
+});
+
+router.get('/graphMapMode', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+    try {
+        const data = {
+            method: "StvgdContract:GetAvailableBatches",
+            args: []
+        }
+
+        const request = await fabloChannelRequest(req, 'query', data)
+
+        let info = request.data.response
+
         const result = getTraceabilityMapData(info)
+
+        return res.status(200).json({ data: result })
+    } catch (error: any) {
+        console.log(error)
+        return res.status(400).json({ error })
+    }
+});
+
+router.get('/graphMapModeID/:ID', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+    try {
+        const { ID } = req.params
+
+        const data = {
+            method: "StvgdContract:GetAvailableBatches",
+            args: []
+        }
+
+        const request = await fabloChannelRequest(req, 'query', data)
+
+        let info = request.data.response
+        // let info = dataExample.data 
+
+        let infoByID = getTraceabilityDataById(info, ID)
+
+        const result = getTraceabilityMapData([infoByID])
 
         return res.status(200).json({ data: result })
     } catch (error: any) {

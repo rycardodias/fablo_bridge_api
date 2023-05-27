@@ -4,7 +4,8 @@ import type { BatchType, ProductionType, ReceptionType, RegistrationType, Transp
 import coordinatesHandler from "../coordinatesHandler";
 
 let nodes: Array<any> = []
-let arcs: Array<ArcType> = []
+let arcs: Array<any> = []
+let transportIDsToRemove: Array<string> = []
 
 function setNodes(node: any): void {
     nodes.push(node)
@@ -30,8 +31,7 @@ function batchProcedure(info: BatchType): void {
 
         setNodes(newObject)
     } catch (error) {
-        console.log('GraphMapHandler', error);
-        throw error;
+        throw error
     }
 }
 
@@ -58,7 +58,6 @@ function productionProcedure(info: ProductionType): void {
 
         setNodes(newObject)
     } catch (error) {
-        console.log('GraphMapHandler', error);
         throw error
     }
 }
@@ -83,8 +82,7 @@ function receptionProcedure(info: ReceptionType): void {
         setNodes(newObject)
 
     } catch (error) {
-        console.log('GraphMapHandler', error);
-        throw error;
+        throw error
     }
 }
 
@@ -106,7 +104,6 @@ function registrationProcedure(info: RegistrationType): void {
         setNodes(newObject)
 
     } catch (error) {
-        console.log('GraphMapHandler', error);
         throw error
     }
 }
@@ -132,7 +129,6 @@ function transportationProcedure(info: TransportationType): void {
         setNodes(newObject)
 
     } catch (error) {
-        console.log('GraphMapHandler', error);
         throw error
     }
 }
@@ -160,87 +156,88 @@ function GraphMapHandler(info: any) {
             return index === nodes.findIndex((n) => n.ID === node.ID);
         });
     } catch (error) {
-        console.log('GraphMapHandler', error);
         throw error;
     }
 }
 
 function calculateArcs(nodes: Array<any>): void {
     try {
-        console.log(nodes)
-
         nodes.forEach(node => {
-            node.mapInfo.output.forEach((element: Array<string>) => {
-                const initialNode = node.mapInfo.coordinates
-                const finalNode = nodes.find(filtered => filtered.ID === element).mapInfo.coordinates
+            if (node.docType === 'rg' || node.docType === 'p' || node.docType === 'rc') {
+
+                const finalNode = nodes.find(filtered => filtered.ID === node.mapInfo.output[0])
 
                 arcs.push({
-                    ID: node.ID + "-" + element,
+                    ID: node.ID + "-" + finalNode.ID,
                     activityConnection: false,
-                    initialNode: { ID: node.ID, ...initialNode },
-                    finalNode: { ID: element, ...finalNode }
+                    initialNode: node.ID,
+                    finalNode: finalNode.ID,
                 })
 
-                const finalNodeAtivity = nodes.filter((filtered: any) => filtered.mapInfo.input.includes(element))[0]
-
-                if (finalNodeAtivity) {
-                    arcs.push({
-                        ID: element + "-" + node.ID,
-                        activityConnection: true,
-                        initialNode: { ID: node.ID, ...initialNode },
-                        finalNode: { ID: finalNodeAtivity.ID, ...finalNodeAtivity.mapInfo.coordinates }
-                    })
-                }
-            });
-
-            node.mapInfo.input.forEach((element: Array<string>) => {
-                const finalNode = node.mapInfo.coordinates
-                const initialNode = nodes.find(filtered => filtered.ID === element).mapInfo.coordinates
-
-                arcs.push({
-                    ID: element + "-" + node.ID,
-                    activityConnection: false,
-                    initialNode: { ID: element, ...initialNode },
-                    finalNode: { ID: node.ID, ...finalNode }
-                })
-            });
-
-            if (node.docType === 't') {
-                const initialNode = node.mapInfo.coordinates
-
-                let finalNode: any = nodes.filter((filteredDocType: any) => filteredDocType.docType === 'rc')
-                    .filter(filterInput => filterInput.mapInfo.input[0] === node.mapInfo.input[0])[0]
-
-                if (finalNode) {
-                    arcs.push({
-                        ID: node.ID + "-" + finalNode.ID,
-                        activityConnection: true,
-                        initialNode: { ID: node.ID, ...initialNode },
-                        finalNode: { ID: finalNode.ID, ...finalNode.mapInfo.coordinates }
+                if (node.docType === "p") {
+                    node.mapInfo.input.forEach((element: Array<string>) => {
+                        arcs.push({
+                            ID: element + "-" + node.ID,
+                            activityConnection: true,
+                            initialNode: element,
+                            finalNode: node.ID
+                        })
                     })
                 }
             }
+
+            if (node.docType === 't') {
+
+                const finalNode = nodes
+                    .filter(item => item.docType === 'rc')
+                    .find(filtered => filtered.mapInfo.input[0] === node.mapInfo.input[0])
+                // console.log(finalNode && finalNode.ID, node.ID, node.mapInfo)
+
+                if (!finalNode) {
+                    transportIDsToRemove.push(node.ID)
+                } else {
+                    arcs.push({
+                        ID: node.ID + "-" + finalNode.ID,
+                        activityConnection: true,
+                        initialNode: node.ID,
+                        finalNode: finalNode.ID
+                    })
+
+                    arcs.push({
+                        ID: node.mapInfo.input[0] + "-" + node.ID,
+                        activityConnection: true,
+                        initialNode: node.mapInfo.input[0],
+                        finalNode: node.ID
+                    })
+                }
+
+            }
         })
-    } catch (error) {
-        console.log('calculateArcs', nodes, error)
+
+    } catch (error: any) {
+        console.log('calculateArcs', error.message)
         throw error
     }
 }
 
 
-export default function getTraceabilityMapData(data: any): { nodes: Array<any>, arcs: Array<any> } {
-    try {
-        nodes = [];
-        arcs = [];
+export default function getTraceabilityDataByIDHandler(data: any): { nodes: Array<any>, arcs: Array<any> } {
+    //é neste
+    nodes = [];
+    arcs = [];
 
-        data.map((item: any) => {
-            GraphMapHandler(item)
-        })
-        calculateArcs(nodes)
+    data.map((item: any) => {
+        GraphMapHandler(item)
+    })
 
-        return { nodes, arcs }
-    } catch (error) {
-        console.log('getTraceabilityMapData', error)
-        return { nodes, arcs }
-    }
+    calculateArcs(nodes)
+
+    transportIDsToRemove = transportIDsToRemove.filter((item) => {
+        const arcsFound = arcs.find((arc) => arc.initialNode === item || arc.finalNode === item);
+        return !arcsFound;
+    });
+
+    nodes = nodes.filter((item) => !transportIDsToRemove.includes(item.ID));
+
+    return { nodes, arcs }
 }
