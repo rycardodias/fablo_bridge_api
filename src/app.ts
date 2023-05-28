@@ -7,6 +7,7 @@ const session = require('express-session')
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 const cors = require('cors')
 
+
 // db.authenticate()
 //     .then(() => console.info('Connection has been established successfully.'))
 //     .catch((error: any) => console.error('Unable to connect to the database:', error))
@@ -14,6 +15,7 @@ const cors = require('cors')
 // db.sync({ alter: process.env.NODE_ENV === 'docker' })
 //     .then(() => console.log("All models were synchronized successfully."))
 //     .catch((error: any) => console.error('Unable to syncronize database:', error))
+
 
 i18next
     .use(middleware.LanguageDetector)
@@ -61,7 +63,8 @@ app.use(session({
 
 sessionStore.sync()
 
-app.all('/', (req: Request, res: Response) => {
+app.all('/', async (req: Request, res: Response) => {
+
     return res.send("FABLO BRIDGE API!")
 });
 

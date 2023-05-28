@@ -6,6 +6,7 @@ import getTraceabilityMapData from "../../../functions/graphMapMode/GraphMapHand
 import getTraceabilityData from "../../../functions/graphMode/graphModeHandler";
 import getTraceabilityDataById from "../../../functions/getTraceabilyByID";
 import getTraceabilityDataByIDHandler from "../../../functions/graphMode/graphModeHandlerID";
+const client = require('../../../config/clientRedis');
 
 
 router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
@@ -80,6 +81,12 @@ router.delete('/deleteAllBatches', async (req: Request, res: Response<RequestRes
 
 router.get('/graphMode', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
+        const cachedData = await client.get('graphMode')
+
+        if (cachedData) {
+            return res.status(200).json({ data: JSON.parse(cachedData) })
+        }
+
         const data = {
             method: "StvgdContract:GetAvailableBatches",
             args: []
@@ -88,9 +95,10 @@ router.get('/graphMode', async (req: Request, res: Response<RequestResponse>, ne
         const request = await fabloChannelRequest(req, 'query', data)
 
         let info = request.data.response
-        // let info = dataExample.data 
 
         const result = getTraceabilityData(info)
+
+        await client.setEx('graphMode', 60 * 60 * 24, JSON.stringify(result))
 
         return res.status(200).json({ data: result })
     } catch (error: any) {
@@ -103,6 +111,10 @@ router.get('/graphModeID/:ID', async (req: Request, res: Response<RequestRespons
     try {
         const { ID } = req.params
 
+        const cachedData = await client.get('graphModeID' + ID)
+        if (cachedData) {
+            return res.status(200).json({ data: JSON.parse(cachedData) })
+        }
 
         const data = {
             method: "StvgdContract:GetAvailableBatches",
@@ -112,12 +124,13 @@ router.get('/graphModeID/:ID', async (req: Request, res: Response<RequestRespons
         const request = await fabloChannelRequest(req, 'query', data)
 
         let info = request.data.response
-        // let info = dataExample.data 
 
         let infoByID = getTraceabilityDataById(info, ID)
 
 
         const result = getTraceabilityDataByIDHandler([infoByID])
+
+        await client.setEx('graphModeID' + ID, 60 * 60 * 24, JSON.stringify(result))
 
         return res.status(200).json({ data: result })
     } catch (error: any) {
@@ -127,6 +140,19 @@ router.get('/graphModeID/:ID', async (req: Request, res: Response<RequestRespons
 
 router.get('/graphMapMode', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
+        client.keys('*', function (err: any, keys: any) {
+            console.log("entra")
+            if (err) return console.log(err);
+            if (keys) {
+                keys.forEach((key: any) => console.log(key));
+            }
+        });
+
+        const cachedData = await client.get('graphMapMode')
+        if (cachedData) {
+            return res.status(200).json({ data: JSON.parse(cachedData) })
+        }
+
         const data = {
             method: "StvgdContract:GetAvailableBatches",
             args: []
@@ -137,6 +163,8 @@ router.get('/graphMapMode', async (req: Request, res: Response<RequestResponse>,
         let info = request.data.response
 
         const result = getTraceabilityMapData(info)
+
+        await client.setEx('graphMapMode', 60 * 60 * 24, JSON.stringify(result))
 
         return res.status(200).json({ data: result })
     } catch (error: any) {
@@ -149,19 +177,34 @@ router.get('/graphMapModeID/:ID', async (req: Request, res: Response<RequestResp
     try {
         const { ID } = req.params
 
+        const cachedData = await client.get('graphMapModeID' + ID)
+        if (cachedData) {
+            return res.status(200).json({ data: JSON.parse(cachedData) })
+        }
+
         const data = {
             method: "StvgdContract:GetAvailableBatches",
             args: []
         }
 
-        const request = await fabloChannelRequest(req, 'query', data)
+        let info
 
-        let info = request.data.response
-        // let info = dataExample.data 
+        const cachedMainData = await client.get('graphMode') || await client.get('graphMapMode')
 
-        let infoByID = getTraceabilityDataById(info, ID)
+        if (cachedMainData) {
+            info = JSON.parse(cachedData)
+        } else {
+            const request = await fabloChannelRequest(req, 'query', data)
+
+            info = request.data.response
+        }
+
+
+        const infoByID = getTraceabilityDataById(info, ID)
 
         const result = getTraceabilityMapData([infoByID])
+
+        await client.setEx('graphMapModeID' + ID, 60 * 60 * 24, JSON.stringify(result))
 
         return res.status(200).json({ data: result })
     } catch (error: any) {
