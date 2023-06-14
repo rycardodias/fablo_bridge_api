@@ -49,7 +49,81 @@ All endpoints in this category start with /onchain
    4. Delete All Batches **/deleteAllBatches**
 
 
-3. Channel Activities Production /channel/activities/production
-4. Channel Activities Logistical Reception /channel/activities/logistical/reception
-5. Channel Activities Logistical Registration /channel/activities/logistical/registration
-6. Channel Activities Logistical Transportation /channel/activities/logistical/transportation
+3. Channel Activities Production **/channel/activities/production**
+      1. Get All Productions **/** 
+      2. Get Production by id **/getById/:id**
+      3. Insert Production **/insert** ✔️
+          ```json
+            {
+            "productionID": "p-xxxxxxxx",
+            "productionUnitInternalID": "PU1",
+            "productionType": "SPINNING",
+            "activityStartDate": "2022-09-12T11:45:26.371Z",
+            "batchID": "b-xxxxxxxx",
+            "batchType": "YARN",
+            "batchInternalID": "b-xxxxxxxx-iid",
+            "supplierID": "suppl-001",
+            "inputBatches": {
+               "b-xxxxxxxx": 100,
+               "b-yyyyyyyy": 100
+            },
+            "batchComposition": {
+               "organic_cotton": 50,
+               "polyamide6": 50
+            },
+            "quantity": "200",
+            "finalScore": "-3",
+            "productionScore": "-1",
+            "ses": "-9"
+            }
+
+4. Channel Activities Logistical Reception **/channel/activities/logistical/reception**
+      1. Get All Receptions **/** 
+      2. Get Reception by id **/getById/:id**
+      3. Insert Registration **/insert** ✔️
+          ```json
+            {
+               "receptionID": "rc-xxxxxxxx",
+               "productionUnitInternalID": "P-01",
+               "activityDate": "2023-05-03T00:00:00Z",
+               "receivedBatchID": "b-xxxxxxxx",
+               "newBatchID": "b-xxxxxxxx",
+               "newBatchInternalID": "b-xxxxxxxx-iid",
+               "isAccepted": true,
+               "distance": 100
+            }
+
+5. Channel Activities Logistical Registration **/channel/activities/logistical/registration**
+      1. Get All Registrations **/** 
+      2. Get Registration by id **/getById/:id**
+      3. Insert Registration **/insert** ✔️
+          ```json
+            {
+               "registrationID": "rg-xxxxxxxx",
+               "ProductionUnitID": "P-01",
+               "batchID": "b-xxxxxxxx",
+               "batchType": "EXAMPLE_TYPE",
+               "batchInternalID": "b-xxxxxxxx-iid",
+               "supplierID": "Suppl-xxxxxxxx",
+               "quantity": "100",
+               "batchComposition": {
+                  "organic_cotton": 100
+               }
+            }
+
+6. Channel Activities Logistical Transportation **/channel/activities/logistical/transportation**
+      1. Get All Transportations **/** 
+      2. Get Transportation by id **/getById/:id**
+      3. Insert Transportation **/insert** ✔️
+          ```json
+            {
+               "transportID": "t-xxxxxxxx",
+               "originProductionUnitInternalID": "p-xxxxxxxx",
+               "destinationProductionUnitID": "p-xxxxxxxx",
+               "transportType": "EXAMPLE_TYPE",
+               "activityDate": "2023-05-03T00:00:00Z",
+               "inputBatches": {
+                  "b-xxxxxxxx": 100
+               },
+               "isReturn": false,
+            }
