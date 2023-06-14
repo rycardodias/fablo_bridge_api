@@ -12,8 +12,8 @@ router.get('/',
     isAuthenticated(['ADMIN']),
     async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
         try {
-            const request = await Model.findAll({ exclude: ['password'] })
-
+            const request = await Model.findAll({ attributes: { exclude: ['password'] } })
+            
             return res.status(200).json({ data: request })
 
         } catch (error) {
@@ -44,7 +44,7 @@ router.post('/insert', async (req: Request, res: Response, next: NextFunction) =
     }
 });
 
-router.put('/update', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
+router.put('/update', isAuthenticated(['ADMIN']), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password, name, permission } = req.body
 
@@ -64,7 +64,7 @@ router.put('/update', isAuthenticated(), async (req: Request, res: Response, nex
     }
 });
 
-router.delete('/delete', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
+router.delete('/delete', isAuthenticated(['ADMIN']), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body
 
@@ -73,8 +73,6 @@ router.delete('/delete', isAuthenticated(), async (req: Request, res: Response, 
                 email: email,
             }
         })
-
-        console.log(request)
 
         if (request === 0) return next(ErrorResponse.invalidDelete())
 
@@ -103,7 +101,7 @@ router.post('/login',
 
             if (await bcrypt.compareSync(password, request.password)) {
 
-                
+
                 req.session.user = {
                     id: request.id,
                     permission: request.permission,

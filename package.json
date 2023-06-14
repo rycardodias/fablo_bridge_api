@@ -4,7 +4,8 @@
     "start": "node dist/src/index.js",
     "dev": "ts-node-dev --files src/index.ts",
     "tsc": "tsc",
-    "seed": "npx sequelize-cli db:seed:undo:all & npx sequelize db:seed:all"
+    "seed": "npx sequelize-cli db:seed:undo:all & npx sequelize db:seed:all",
+    "test": "npx jest"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",

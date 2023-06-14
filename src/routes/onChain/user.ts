@@ -32,14 +32,4 @@ router.post('/register', async (req: Request, res: Response<RequestResponse>, ne
     }
 });
 
-router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
-    try {
-        const request = await fabloRequest(req, 'GET', '/user/identities')
-
-        return res.status(200).json({ data: request.data.response.identities })
-    } catch (error: any) {
-        return res.status(404).json({ error: error.response.data.message })
-    }
-});
-
 module.exports = router
