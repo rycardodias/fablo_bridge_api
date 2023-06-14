@@ -42,12 +42,19 @@ router.get('/getById/:id', async (req: Request, res: Response<RequestResponse>, 
 router.post('/insert', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const { receptionID, productionUnitInternalID, activityDate, receivedBatchID, newBatchID,
-            newBatchInternalID, isAccepted, transportScore, ses, distance } = req.body;
+            newBatchInternalID, isAccepted, distance } = req.body;
+
+        function calculateTransportScore(): string {
+            return '-9'
+        }
+        function calculateSes(): string {
+            return '-9'
+        }
 
         const data = {
             method: "StvgdContract:CreateReception",
             args: [receptionID, productionUnitInternalID, activityDate, receivedBatchID, newBatchID,
-                newBatchInternalID, isAccepted, transportScore, ses, distance, '1'] //FIXME: remover parametro hardcode do cost
+                newBatchInternalID, isAccepted, calculateTransportScore(), calculateSes(), distance, '1'] //FIXME: remover parametro hardcode do cost
         }
 
         const request = await fabloChannelRequest(req, 'invoke', data)

@@ -7,6 +7,14 @@ client.on("connect", function () {
     console.log("You are now connected");
 });
 
+client.on("quit", function () {
+    console.log("You are now disconnected");
+})
+
+client.on("exit", function(){
+    client.quit();
+});
+
 client.connect()
 
 module.exports = client;

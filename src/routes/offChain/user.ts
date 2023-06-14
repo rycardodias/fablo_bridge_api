@@ -74,10 +74,13 @@ router.delete('/delete', isAuthenticated(), async (req: Request, res: Response, 
             }
         })
 
+        console.log(request)
+
         if (request === 0) return next(ErrorResponse.invalidDelete())
 
         return res.status(201).json({ data: req.t("row_deleted") })
     } catch (error: any) {
+        console.log(error)
         return next(ErrorResponse.badRequest(error))
     }
 });
@@ -117,7 +120,7 @@ router.post('/login',
                 })
             }
 
-            return res.status(200).json({ error: req.t("user_not_authenticated") })
+            return res.status(401).json({ error: req.t("user_not_authenticated") })
 
         } catch (error: any) {
             console.log(error)

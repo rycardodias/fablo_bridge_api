@@ -40,12 +40,16 @@ router.get('/getById/:id', async (req: Request, res: Response<RequestResponse>, 
 router.post('/insert', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const { registrationID, ProductionUnitID, batchID, batchType, batchInternalID,
-            supplierID, quantity, finalScore, batchComposition } = req.body;
+            supplierID, quantity, batchComposition } = req.body;
+
+        function calculateFinalScore(): string {
+            return '-3'
+        }
 
         const data = {
             method: "StvgdContract:CreateRegistration",
             args: [registrationID, ProductionUnitID, batchID, batchType, batchInternalID,
-                supplierID, quantity, finalScore, JSON.stringify(batchComposition)]
+                supplierID, quantity, calculateFinalScore(), JSON.stringify(batchComposition)]
         }
 
         const request = await fabloChannelRequest(req, 'invoke', data)

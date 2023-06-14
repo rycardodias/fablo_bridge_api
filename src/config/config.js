@@ -8,6 +8,13 @@ module.exports = {
     host: "localhost",
     dialect: "postgres"
   },
+  test: {
+    username: "postgres",
+    password: "root",
+    database: "stv-development",
+    host: "localhost",
+    dialect: "postgres"
+  },
   docker: {
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,

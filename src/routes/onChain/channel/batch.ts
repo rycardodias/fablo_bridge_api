@@ -6,6 +6,7 @@ import getTraceabilityMapData from "../../../functions/graphMapMode/GraphMapHand
 import getTraceabilityData from "../../../functions/graphMode/graphModeHandler";
 import getTraceabilityDataById from "../../../functions/getTraceabilyByID";
 import getTraceabilityDataByIDHandler from "../../../functions/graphMode/graphModeHandlerID";
+import { getRedisData, setRedisData } from "../../../functions/RedisOperations";
 const client = require('../../../config/clientRedis');
 
 
@@ -81,7 +82,7 @@ router.delete('/deleteAllBatches', async (req: Request, res: Response<RequestRes
 
 router.get('/graphMode', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
-        const cachedData = await client.get('graphMode')
+        const cachedData = await getRedisData('graphMode')
 
         if (cachedData) {
             return res.status(200).json({ data: JSON.parse(cachedData) })
@@ -98,7 +99,7 @@ router.get('/graphMode', async (req: Request, res: Response<RequestResponse>, ne
 
         const result = getTraceabilityData(info)
 
-        await client.setEx('graphMode', 60 * 60 * 24, JSON.stringify(result))
+        await setRedisData('graphMode', 60 * 60 * 24, JSON.stringify(result))
 
         return res.status(200).json({ data: result })
     } catch (error: any) {
@@ -111,7 +112,7 @@ router.get('/graphModeID/:ID', async (req: Request, res: Response<RequestRespons
     try {
         const { ID } = req.params
 
-        const cachedData = await client.get('graphModeID' + ID)
+        const cachedData = await getRedisData('graphModeID' + ID)
         if (cachedData) {
             return res.status(200).json({ data: JSON.parse(cachedData) })
         }
@@ -130,7 +131,7 @@ router.get('/graphModeID/:ID', async (req: Request, res: Response<RequestRespons
 
         const result = getTraceabilityDataByIDHandler([infoByID])
 
-        await client.setEx('graphModeID' + ID, 60 * 60 * 24, JSON.stringify(result))
+        await setRedisData('graphModeID' + ID, 60 * 60 * 24, JSON.stringify(result))
 
         return res.status(200).json({ data: result })
     } catch (error: any) {
@@ -140,15 +141,8 @@ router.get('/graphModeID/:ID', async (req: Request, res: Response<RequestRespons
 
 router.get('/graphMapMode', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
-        client.keys('*', function (err: any, keys: any) {
-            console.log("entra")
-            if (err) return console.log(err);
-            if (keys) {
-                keys.forEach((key: any) => console.log(key));
-            }
-        });
 
-        const cachedData = await client.get('graphMapMode')
+        const cachedData = await getRedisData('graphMapMode')
         if (cachedData) {
             return res.status(200).json({ data: JSON.parse(cachedData) })
         }
@@ -164,7 +158,7 @@ router.get('/graphMapMode', async (req: Request, res: Response<RequestResponse>,
 
         const result = getTraceabilityMapData(info)
 
-        await client.setEx('graphMapMode', 60 * 60 * 24, JSON.stringify(result))
+        await setRedisData('graphMapMode', 60 * 60 * 24, JSON.stringify(result))
 
         return res.status(200).json({ data: result })
     } catch (error: any) {
@@ -177,7 +171,7 @@ router.get('/graphMapModeID/:ID', async (req: Request, res: Response<RequestResp
     try {
         const { ID } = req.params
 
-        const cachedData = await client.get('graphMapModeID' + ID)
+        const cachedData = await getRedisData('graphMapModeID' + ID)
         if (cachedData) {
             return res.status(200).json({ data: JSON.parse(cachedData) })
         }
@@ -189,7 +183,7 @@ router.get('/graphMapModeID/:ID', async (req: Request, res: Response<RequestResp
 
         let info
 
-        const cachedMainData = await client.get('graphMode') || await client.get('graphMapMode')
+        const cachedMainData =await getRedisData('graphMode') || await getRedisData('graphMapMode')
 
         if (cachedMainData) {
             info = JSON.parse(cachedData)
@@ -204,7 +198,7 @@ router.get('/graphMapModeID/:ID', async (req: Request, res: Response<RequestResp
 
         const result = getTraceabilityMapData([infoByID])
 
-        await client.setEx('graphMapModeID' + ID, 60 * 60 * 24, JSON.stringify(result))
+        await setRedisData('graphMapModeID' + ID, 60 * 60 * 24, JSON.stringify(result))
 
         return res.status(200).json({ data: result })
     } catch (error: any) {
