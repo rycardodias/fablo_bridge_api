@@ -25,15 +25,15 @@ There are a number of endpoints divided by off-chain and on-chain requests.
 ✔️ ⚠️ ❌
 All endpoints in this category start with /onchain
 
-1. User [/user]
-   1. Enroll [/enroll] ✔️ 
+1. User **/user**
+   1. Enroll **/enroll** ✔️ 
         ```json
         {
         "id": "exampleId",
         "secret": "exampleSecret"
         }
     
-    2. Register [/register] ✔️
+    2. Register **/register** ✔️
         ```json
         {
         "id": "exampleId",
@@ -42,11 +42,11 @@ All endpoints in this category start with /onchain
     
     3. Get Entities / ⚠️
    
-2. Channel Batch [/channel/batch]
-   1. Get All Batches [/] ✔️
-   2. Get Batch by id [/getBatchById/:id]
-   3. Get Batch by internal id [/getBatchByInternalId/:id]
-   4. Delete All Batches [/deleteAllBatches]
+2. Channel Batch **/channel/batch**
+   1. Get All Batches **/** ✔️
+   2. Get Batch by id **/getBatchById/:id**
+   3. Get Batch by internal id **/getBatchByInternalId/:id**
+   4. Delete All Batches **/deleteAllBatches**
 
 
 3. Channel Activities Production /channel/activities/production
