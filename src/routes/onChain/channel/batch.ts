@@ -78,6 +78,9 @@ router.get('/graphMode', async (req: Request, res: Response<RequestResponse>, ne
         const request = await fabloChannelRequest(req, 'query', data)
 
         let info = request.data.response
+        
+        await setRedisData('graphModeOriginal', 60 * 60 * 24, JSON.stringify(info))
+
 
         const result = getTraceabilityData(info)
 
@@ -125,6 +128,7 @@ router.get('/graphMapMode', async (req: Request, res: Response<RequestResponse>,
     try {
 
         const cachedData = await getRedisData('graphMapMode')
+
         if (cachedData) {
             return res.status(200).json({ data: JSON.parse(cachedData) })
         }
@@ -137,6 +141,8 @@ router.get('/graphMapMode', async (req: Request, res: Response<RequestResponse>,
         const request = await fabloChannelRequest(req, 'query', data)
 
         let info = request.data.response
+
+        await setRedisData('graphMapModeOriginal', 60 * 60 * 24, JSON.stringify(info))
 
         const result = getTraceabilityMapData(info)
 
@@ -165,10 +171,10 @@ router.get('/graphMapModeID/:ID', async (req: Request, res: Response<RequestResp
 
         let info
 
-        const cachedMainData =await getRedisData('graphMode') || await getRedisData('graphMapMode')
+        const cachedMainData = await getRedisData('graphModeOriginal') || await getRedisData('graphMapModeOriginal')
 
-        if (cachedMainData) {
-            info = JSON.parse(cachedData)
+        if (false) {
+            info = JSON.parse(cachedMainData)
         } else {
             const request = await fabloChannelRequest(req, 'query', data)
 

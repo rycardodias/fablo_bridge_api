@@ -167,8 +167,6 @@ function GraphMapHandler(info: any) {
 
 function calculateArcs(nodes: Array<any>): void {
     try {
-        console.log(nodes)
-
         nodes.forEach(node => {
             node.mapInfo.output.forEach((element: Array<string>) => {
                 const initialNode = node.mapInfo.coordinates
