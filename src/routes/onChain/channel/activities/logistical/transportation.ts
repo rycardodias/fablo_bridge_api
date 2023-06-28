@@ -53,7 +53,9 @@ router.post('/insert', async (req: Request, res: Response<RequestResponse>, next
         const request = await fabloChannelRequest(req, 'invoke', data)
 
         client.del('graphMode')
+        client.del('graphModeOriginal')
         client.del('graphMapMode')
+        client.del('graphMapModeOriginal')
 
         return res.status(200).json({ data: request.data.response })
     } catch (error: any) {

@@ -78,13 +78,13 @@ router.get('/graphMode', async (req: Request, res: Response<RequestResponse>, ne
         const request = await fabloChannelRequest(req, 'query', data)
 
         let info = request.data.response
-        
-        await setRedisData('graphModeOriginal', 60 * 60 * 24, JSON.stringify(info))
+
+        await setRedisData('graphModeOriginal', 60 * 60 * 24 * 30, JSON.stringify(info))
 
 
         const result = getTraceabilityData(info)
 
-        await setRedisData('graphMode', 60 * 60 * 24, JSON.stringify(result))
+        await setRedisData('graphMode', 60 * 60 * 24* 30, JSON.stringify(result))
 
         return res.status(200).json({ data: result })
     } catch (error: any) {
@@ -116,7 +116,7 @@ router.get('/graphModeID/:ID', async (req: Request, res: Response<RequestRespons
 
         const result = getTraceabilityDataByIDHandler([infoByID])
 
-        await setRedisData('graphModeID' + ID, 60 * 60 * 24, JSON.stringify(result))
+        await setRedisData('graphModeID' + ID, 60 * 60 * 24* 30, JSON.stringify(result))
 
         return res.status(200).json({ data: result })
     } catch (error: any) {
@@ -142,11 +142,11 @@ router.get('/graphMapMode', async (req: Request, res: Response<RequestResponse>,
 
         let info = request.data.response
 
-        await setRedisData('graphMapModeOriginal', 60 * 60 * 24, JSON.stringify(info))
+        await setRedisData('graphMapModeOriginal', 60 * 60 * 24* 30, JSON.stringify(info))
 
         const result = getTraceabilityMapData(info)
 
-        await setRedisData('graphMapMode', 60 * 60 * 24, JSON.stringify(result))
+        await setRedisData('graphMapMode', 60 * 60 * 24* 30, JSON.stringify(result))
 
         return res.status(200).json({ data: result })
     } catch (error: any) {
@@ -186,7 +186,7 @@ router.get('/graphMapModeID/:ID', async (req: Request, res: Response<RequestResp
 
         const result = getTraceabilityMapData([infoByID])
 
-        await setRedisData('graphMapModeID' + ID, 60 * 60 * 24, JSON.stringify(result))
+        await setRedisData('graphMapModeID' + ID, 60 * 60 * 24* 30, JSON.stringify(result))
 
         return res.status(200).json({ data: result })
     } catch (error: any) {

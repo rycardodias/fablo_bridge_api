@@ -28,6 +28,8 @@ export default async function fabloRequest(req: Request, method: string, url: st
                 port: '8803'
             },
         ]
+
+        if(!req.session.user) throw new Error(`Invalid port`);
         
         const request = await axios({
             headers: {
