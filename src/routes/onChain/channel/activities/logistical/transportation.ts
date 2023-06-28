@@ -4,7 +4,7 @@ import RequestResponse from '../../../../../interfaces/RequestResponse'
 const client = require('../../../../../config/clientRedis');
 
 const router = express.Router();
-// const isAuthenticated = require('../../validators/isAuthenticated')
+const isAuthenticated = require('../../../../../validators/isAuthenticated')
 
 
 router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
@@ -39,7 +39,7 @@ router.get('/getById/:id', async (req: Request, res: Response<RequestResponse>, 
     }
 });
 
-router.post('/insert', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+router.post('/insert', isAuthenticated(['RESPONSABLE', 'MEMBER']), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const { transportID, originProductionUnitInternalID, destinationProductionUnitID, transportType,
             activityDate, inputBatches, isReturn } = req.body;

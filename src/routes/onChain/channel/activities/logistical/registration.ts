@@ -3,6 +3,7 @@ import { fabloChannelRequest } from "../../../../../config/fabloApi";
 import RequestResponse from '../../../../../interfaces/RequestResponse'
 const router = express.Router();
 const client = require('../../../../../config/clientRedis');
+const isAuthenticated = require('../../../../../validators/isAuthenticated')
 
 
 router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
@@ -37,7 +38,7 @@ router.get('/getById/:id', async (req: Request, res: Response<RequestResponse>, 
     }
 });
 
-router.post('/insert', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+router.post('/insert', isAuthenticated(['RESPONSABLE', 'MEMBER']), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const { registrationID, ProductionUnitID, batchID, batchType, batchInternalID,
             supplierID, quantity, batchComposition } = req.body;
@@ -62,7 +63,7 @@ router.post('/insert', async (req: Request, res: Response<RequestResponse>, next
 
         return res.status(200).json({ data: request.data.response })
     } catch (error: any) {
-        // console.log(error)
+        console.log(error)
         return res.status(400).json({ error: error })
     }
 });

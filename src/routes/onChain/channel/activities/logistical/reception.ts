@@ -5,6 +5,7 @@ import ErrorResponse from "../../../../../validators/ErrorResponse";
 const router = express.Router();
 // const isAuthenticated = require('../../validators/isAuthenticated')
 const client = require('../../../../../config/clientRedis');
+const isAuthenticated = require('../../../../../validators/isAuthenticated')
 
 
 router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
@@ -39,7 +40,7 @@ router.get('/getById/:id', async (req: Request, res: Response<RequestResponse>, 
     }
 });
 
-router.post('/insert', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+router.post('/insert', isAuthenticated(['RESPONSABLE', 'MEMBER']), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const { receptionID, productionUnitInternalID, activityDate, receivedBatchID, newBatchID,
             newBatchInternalID, isAccepted, distance } = req.body;

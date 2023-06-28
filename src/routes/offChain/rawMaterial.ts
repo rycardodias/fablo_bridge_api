@@ -25,7 +25,7 @@ router.get('/byId/:id', isAuthenticated(), async (req: Request, res: Response<Re
     }
 });
 
-router.post('/insert', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
+router.post('/insert', isAuthenticated(['ADMIN']), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { textContentId, fiberName, climateChange, fossilDepletion, freshwatterConsunsuption, freshwatterEutrophication } = req.body
 
@@ -44,7 +44,7 @@ router.post('/insert', isAuthenticated(), async (req: Request, res: Response, ne
     }
 });
 
-router.put('/update', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
+router.put('/update', isAuthenticated(['ADMIN']), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id, textContentId, fiberName, climateChange, fossilDepletion, freshwatterConsunsuption, freshwatterEutrophication } = req.body
 
@@ -68,7 +68,7 @@ router.put('/update', isAuthenticated(), async (req: Request, res: Response, nex
     }
 });
 
-router.delete('/delete', isAuthenticated(), async (req: Request, res: Response, next: NextFunction) => {
+router.delete('/delete', isAuthenticated(['ADMIN']), async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.body
 

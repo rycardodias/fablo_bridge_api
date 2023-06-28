@@ -107,12 +107,19 @@ router.get('/graphModeID/:ID', async (req: Request, res: Response<RequestRespons
             args: []
         }
 
-        const request = await fabloChannelRequest(req, 'query', data)
+        let info;
 
-        let info = request.data.response
+        const cachedMainData = await getRedisData('graphModeOriginal') || await getRedisData('graphMapModeOriginal')
+
+        if (cachedMainData) {
+            info = JSON.parse(cachedMainData)
+        } else {
+            const request = await fabloChannelRequest(req, 'query', data)
+
+            info = request.data.response
+        }
 
         let infoByID = getTraceabilityDataById(info, ID)
-
 
         const result = getTraceabilityDataByIDHandler([infoByID])
 
@@ -173,7 +180,7 @@ router.get('/graphMapModeID/:ID', async (req: Request, res: Response<RequestResp
 
         const cachedMainData = await getRedisData('graphModeOriginal') || await getRedisData('graphMapModeOriginal')
 
-        if (false) {
+        if (cachedMainData) {
             info = JSON.parse(cachedMainData)
         } else {
             const request = await fabloChannelRequest(req, 'query', data)

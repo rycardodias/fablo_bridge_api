@@ -2,8 +2,8 @@ import express, { Request, Response, NextFunction } from "express";
 import { fabloChannelRequest } from "../../../../config/fabloApi";
 import RequestResponse from '../../../../interfaces/RequestResponse'
 const router = express.Router();
-// const isAuthenticated = require('../../validators/isAuthenticated')
 const client = require('../../../../config/clientRedis');
+const isAuthenticated = require('../../../../validators/isAuthenticated')
 
 
 router.get('/', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
@@ -38,7 +38,7 @@ router.get('/getById/:id', async (req: Request, res: Response<RequestResponse>, 
     }
 });
 
-router.post('/insert', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
+router.post('/insert', isAuthenticated(['RESPONSABLE', 'MEMBER']), async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
         const { productionID, productionUnitInternalID, productionType, activityStartDate, batchID,
             batchType, batchInternalID, supplierID, inputBatches, batchComposition, quantity, } = req.body;
