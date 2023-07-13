@@ -20,7 +20,11 @@ function batchProcedure(info: BatchType): void {
 
         let newObject: MapInfoInterface & BatchType = {
             ...info,
-            mapInfo: { coordinates: coordinatesHandler(info.latestOwner), input: [], output: [] }
+            mapInfo: {
+                coordinates: { lat: 0, lng: 0 }, //coordinatesHandler(info.originProductionUnitID),
+                input: [],
+                output: []
+            }
         }
 
         newObject.mapInfo.input = []
@@ -42,7 +46,11 @@ function productionProcedure(info: ProductionType): void {
 
         let newObject: MapInfoInterface & ProductionType = {
             ...info,
-            mapInfo: { coordinates: coordinatesHandler(info.productionUnitID), input: [], output: [] }
+            mapInfo: {
+                coordinates: { lat: 0, lng: 0 }, //coordinatesHandler(info.originProductionUnitID),
+                input: [],
+                output: []
+            }
         }
 
         newObject.mapInfo.input = Object.keys(info.inputBatches)
@@ -69,7 +77,11 @@ function receptionProcedure(info: ReceptionType): void {
 
         let newObject: MapInfoInterface & ReceptionType = {
             ...info,
-            mapInfo: { coordinates: coordinatesHandler(info.productionUnitID), input: [], output: [] }
+            mapInfo: {
+                coordinates: { lat: 0, lng: 0 }, //coordinatesHandler(info.originProductionUnitID),
+                input: [],
+                output: []
+            }
         }
 
         newObject.mapInfo.input = [newObject.receivedBatch.ID]
@@ -92,7 +104,11 @@ function registrationProcedure(info: RegistrationType): void {
 
         let newObject: MapInfoInterface & RegistrationType = {
             ...info,
-            mapInfo: { coordinates: coordinatesHandler(info.productionUnitID), input: [], output: [] }
+            mapInfo: {
+                coordinates: { lat: 0, lng: 0 }, //coordinatesHandler(info.originProductionUnitID),
+                input: [],
+                output: []
+            }
         }
 
         newObject.mapInfo.input = []
@@ -117,7 +133,11 @@ function transportationProcedure(info: TransportationType): void {
 
         let newObject: MapInfoInterface & TransportationType = {
             ...info,
-            mapInfo: { coordinates: coordinatesHandler(info.originProductionUnitID), input: [], output: [] }
+            mapInfo: {
+                coordinates: { lat: 0, lng: 0 }, //coordinatesHandler(info.originProductionUnitID),
+                input: [],
+                output: []
+            }
         }
 
         newObject.mapInfo.input = [key]
@@ -186,28 +206,29 @@ function calculateArcs(nodes: Array<any>): void {
             }
 
             if (node.docType === 't') {
-
                 const finalNode = nodes
                     .filter(item => item.docType === 'rc')
                     .find(filtered => filtered.mapInfo.input[0] === node.mapInfo.input[0])
 
+                if (finalNode) {
                     arcs.push({
                         ID: node.ID + "-" + finalNode.ID,
                         activityConnection: true,
                         initialNode: node.ID,
                         finalNode: finalNode.ID
                     })
+                }
 
-                    arcs.push({
-                        ID: node.mapInfo.input[0] + "-" + node.ID,
-                        activityConnection: true,
-                        initialNode: node.mapInfo.input[0],
-                        finalNode: node.ID
-                    })
+                arcs.push({
+                    ID: node.mapInfo.input[0] + "-" + node.ID,
+                    activityConnection: true,
+                    initialNode: node.mapInfo.input[0],
+                    finalNode: node.ID
+                })
             }
         })
 
-        
+
 
     } catch (error: any) {
         console.log('calculateArcs', error.message)
@@ -220,7 +241,7 @@ export default function getTraceabilityData(data: any): { nodes: Array<any>, arc
     //é neste
     nodes = [];
     arcs = [];
-    
+
     data.map((item: any) => {
         GraphMapHandler(item)
     })

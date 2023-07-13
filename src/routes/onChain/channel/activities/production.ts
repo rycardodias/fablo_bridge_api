@@ -69,6 +69,8 @@ router.post('/insert', isAuthenticated(['RESPONSABLE', 'MEMBER']), async (req: R
         client.del('graphMapMode')
         client.del('graphMapModeOriginal')
 
+        client.del('GetAvailableBatches')
+
         return res.status(200).json({ data: request.data.response })
     } catch (error: any) {
         console.log(error)

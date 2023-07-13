@@ -54,11 +54,13 @@ router.post('/insert', isAuthenticated(['RESPONSABLE', 'MEMBER']), async (req: R
         }
 
         const request = await fabloChannelRequest(req, 'invoke', data)
-
+        
         client.del('graphMode')
         client.del('graphModeOriginal')
         client.del('graphMapMode')
         client.del('graphMapModeOriginal')
+
+        client.del('GetAvailableBatches')
 
 
         return res.status(200).json({ data: request.data.response })

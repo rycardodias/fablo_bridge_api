@@ -64,29 +64,40 @@ router.get('/getBatchByInternalId/:id', async (req: Request, res: Response<Reque
 
 router.get('/graphMode', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
-        const cachedData = await getRedisData('graphMode')
+        const cachedFullData = await getRedisData('GetAvailableBatches')
 
-        if (cachedData) {
-            return res.status(200).json({ data: JSON.parse(cachedData) })
+        if (cachedFullData) {
+            const cachedSpecificData = await getRedisData('graphMode')
+
+            if (false) {
+                return res.status(200).json({ data: JSON.parse(cachedSpecificData) })
+            } else {
+                console.log("entra aqui")
+                const result = getTraceabilityData(JSON.parse(cachedFullData))
+
+                await setRedisData('graphMode', 60 * 60 * 24 * 30, JSON.stringify(result))
+
+                return res.status(200).json({ data: result })
+            }
+        } else {
+            const data = {
+                method: "StvgdContract:GetAvailableBatches",
+                args: []
+            }
+
+            const request = await fabloChannelRequest(req, 'query', data)
+
+            let info = request.data.response
+
+            await setRedisData('GetAvailableBatches', 60 * 60 * 24 * 30, JSON.stringify(info))
+
+            const result = getTraceabilityData(info)
+
+            await setRedisData('graphMode', 60 * 60 * 24 * 30, JSON.stringify(result))
+
+            return res.status(200).json({ data: result })
+
         }
-
-        const data = {
-            method: "StvgdContract:GetAvailableBatches",
-            args: []
-        }
-
-        const request = await fabloChannelRequest(req, 'query', data)
-
-        let info = request.data.response
-
-        await setRedisData('graphModeOriginal', 60 * 60 * 24 * 30, JSON.stringify(info))
-
-
-        const result = getTraceabilityData(info)
-
-        await setRedisData('graphMode', 60 * 60 * 24* 30, JSON.stringify(result))
-
-        return res.status(200).json({ data: result })
     } catch (error: any) {
         console.log(error)
         return res.status(400).json({ error })
@@ -97,35 +108,44 @@ router.get('/graphModeID/:ID', async (req: Request, res: Response<RequestRespons
     try {
         const { ID } = req.params
 
-        const cachedData = await getRedisData('graphModeID' + ID)
-        if (cachedData) {
-            return res.status(200).json({ data: JSON.parse(cachedData) })
-        }
+        const cachedFullData = await getRedisData('GetAvailableBatches')
 
-        const data = {
-            method: "StvgdContract:GetAvailableBatches",
-            args: []
-        }
+        if (cachedFullData) {
+            const cachedSpecificData = await getRedisData('graphModeID' + ID)
 
-        let info;
+            if (cachedSpecificData) {
+                return res.status(200).json({ data: JSON.parse(cachedSpecificData) })
+            } else {
+                let infoByID = getTraceabilityDataById(JSON.parse(cachedFullData), ID)
 
-        const cachedMainData = await getRedisData('graphModeOriginal') || await getRedisData('graphMapModeOriginal')
+                const result = getTraceabilityDataByIDHandler([infoByID])
 
-        if (cachedMainData) {
-            info = JSON.parse(cachedMainData)
+                await setRedisData('graphModeID' + ID, 60 * 60 * 24 * 30, JSON.stringify(result))
+
+                return res.status(200).json({ data: result })
+            }
         } else {
+
+            const data = {
+                method: "StvgdContract:GetAvailableBatches",
+                args: []
+            }
+
             const request = await fabloChannelRequest(req, 'query', data)
 
-            info = request.data.response
+            let info = request.data.response
+
+            await setRedisData('GetAvailableBatches', 60 * 60 * 24 * 30, JSON.stringify(info))
+
+            let infoByID = getTraceabilityDataById(info, ID)
+
+            const result = getTraceabilityDataByIDHandler([infoByID])
+
+            await setRedisData('graphModeID' + ID, 60 * 60 * 24 * 30, JSON.stringify(result))
+
+            return res.status(200).json({ data: result })
         }
 
-        let infoByID = getTraceabilityDataById(info, ID)
-
-        const result = getTraceabilityDataByIDHandler([infoByID])
-
-        await setRedisData('graphModeID' + ID, 60 * 60 * 24* 30, JSON.stringify(result))
-
-        return res.status(200).json({ data: result })
     } catch (error: any) {
         return res.status(400).json({ error })
     }
@@ -133,29 +153,38 @@ router.get('/graphModeID/:ID', async (req: Request, res: Response<RequestRespons
 
 router.get('/graphMapMode', async (req: Request, res: Response<RequestResponse>, next: NextFunction) => {
     try {
+        const cachedFullData = await getRedisData('GetAvailableBatches')
 
-        const cachedData = await getRedisData('graphMapMode')
+        if (cachedFullData) {
+            const cachedSpecificData = await getRedisData('graphMapMode')
 
-        if (cachedData) {
-            return res.status(200).json({ data: JSON.parse(cachedData) })
+            if (cachedSpecificData) {
+                return res.status(200).json({ data: JSON.parse(cachedSpecificData) })
+            } else {
+                const result = getTraceabilityMapData(JSON.parse(cachedFullData))
+
+                await setRedisData('graphMapMode', 60 * 60 * 24 * 30, JSON.stringify(result))
+
+                return res.status(200).json({ data: result })
+            }
+        } else {
+            const data = {
+                method: "StvgdContract:GetAvailableBatches",
+                args: []
+            }
+
+            const request = await fabloChannelRequest(req, 'query', data)
+
+            let info = request.data.response
+
+            await setRedisData('GetAvailableBatches', 60 * 60 * 24 * 30, JSON.stringify(info))
+
+            const result = getTraceabilityMapData(info)
+
+            await setRedisData('graphMapMode', 60 * 60 * 24 * 30, JSON.stringify(result))
+
+            return res.status(200).json({ data: result })
         }
-
-        const data = {
-            method: "StvgdContract:GetAvailableBatches",
-            args: []
-        }
-
-        const request = await fabloChannelRequest(req, 'query', data)
-
-        let info = request.data.response
-
-        await setRedisData('graphMapModeOriginal', 60 * 60 * 24* 30, JSON.stringify(info))
-
-        const result = getTraceabilityMapData(info)
-
-        await setRedisData('graphMapMode', 60 * 60 * 24* 30, JSON.stringify(result))
-
-        return res.status(200).json({ data: result })
     } catch (error: any) {
         console.log(error)
         return res.status(400).json({ error })
@@ -166,36 +195,42 @@ router.get('/graphMapModeID/:ID', async (req: Request, res: Response<RequestResp
     try {
         const { ID } = req.params
 
-        const cachedData = await getRedisData('graphMapModeID' + ID)
-        if (cachedData) {
-            return res.status(200).json({ data: JSON.parse(cachedData) })
-        }
+        const cachedFullData = await getRedisData('GetAvailableBatches')
 
-        const data = {
-            method: "StvgdContract:GetAvailableBatches",
-            args: []
-        }
+        if (cachedFullData) {
+            const cachedSpecificData = await getRedisData('graphMapModeID' + ID)
 
-        let info
+            if (cachedSpecificData) {
+                return res.status(200).json({ data: JSON.parse(cachedSpecificData) })
+            } else {
+                const infoByID = getTraceabilityDataById(JSON.parse(cachedFullData), ID)
 
-        const cachedMainData = await getRedisData('graphModeOriginal') || await getRedisData('graphMapModeOriginal')
+                const result = getTraceabilityMapData([infoByID])
 
-        if (cachedMainData) {
-            info = JSON.parse(cachedMainData)
+                await setRedisData('graphMapModeID' + ID, 60 * 60 * 24 * 30, JSON.stringify(result))
+
+                return res.status(200).json({ data: result })
+            }
         } else {
+            const data = {
+                method: "StvgdContract:GetAvailableBatches",
+                args: []
+            }
+
             const request = await fabloChannelRequest(req, 'query', data)
 
-            info = request.data.response
+            let info = request.data.response
+
+            await setRedisData('GetAvailableBatches', 60 * 60 * 24 * 30, JSON.stringify(info))
+
+            const infoByID = getTraceabilityDataById(info, ID)
+
+            const result = getTraceabilityMapData([infoByID])
+
+            await setRedisData('graphModeID' + ID, 60 * 60 * 24 * 30, JSON.stringify(result))
+
+            return res.status(200).json({ data: result })
         }
-
-
-        const infoByID = getTraceabilityDataById(info, ID)
-
-        const result = getTraceabilityMapData([infoByID])
-
-        await setRedisData('graphMapModeID' + ID, 60 * 60 * 24* 30, JSON.stringify(result))
-
-        return res.status(200).json({ data: result })
     } catch (error: any) {
         console.log(error)
         return res.status(400).json({ error })
