@@ -231,11 +231,9 @@ export default function getTraceabilityMapData(data: any): { nodes: Array<any>, 
         nodes = [];
         arcs = [];
 
-        console.log(data)
         data.map((item: any) => {
             GraphMapHandler(item)
         })
-        console.log(nodes)
         calculateArcs(nodes)
 
         return { nodes, arcs }

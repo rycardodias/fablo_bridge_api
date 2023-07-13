@@ -191,7 +191,6 @@ function calculateArcs(nodes: Array<any>): void {
                 const finalNode = nodes
                     .filter(item => item.docType === 'rc')
                     .find(filtered => filtered.mapInfo.input[0] === node.mapInfo.input[0])
-                // console.log(finalNode && finalNode.ID, node.ID, node.mapInfo)
 
                 if (!finalNode) {
                     transportIDsToRemove.push(node.ID)
