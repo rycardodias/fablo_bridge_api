@@ -87,3 +87,29 @@ describe("GET /users", () => {
         expect(response.body).toHaveProperty('error');
     });
 })
+
+describe('PUT /users/update', () => {
+    it('should update the user', async () => {
+        const agent = request.agent(app);
+
+        await agent
+            .post('/users/login')
+            .send({ email: 'admin@stv.pt', password: 'admin' })
+
+        const response = await agent
+            .put('/users/update')
+            .send({email: newUser.email, permission: 'MEMBER'})
+
+        expect(response.status).toBe(201)
+        expect(response.body).toHaveProperty('data');
+    });
+
+    it('should fail to update user by missing permissions', async () => {
+        const response = await request(app)
+            .put('/users/update')
+            .send({email: newUser.email, permission: 'MEMBER'})
+
+        expect(response.status).toBe(403)
+        expect(response.body).toHaveProperty('error');
+    });
+})
