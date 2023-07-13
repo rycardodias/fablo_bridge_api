@@ -72,7 +72,6 @@ router.get('/graphMode', async (req: Request, res: Response<RequestResponse>, ne
             if (cachedSpecificData) {
                 return res.status(200).json({ data: JSON.parse(cachedSpecificData) })
             } else {
-                console.log("entra aqui")
                 const result = getTraceabilityData(JSON.parse(cachedFullData))
 
                 await setRedisData('graphMode', 60 * 60 * 24 * 30, JSON.stringify(result))
