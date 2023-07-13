@@ -69,7 +69,7 @@ router.get('/graphMode', async (req: Request, res: Response<RequestResponse>, ne
         if (cachedFullData) {
             const cachedSpecificData = await getRedisData('graphMode')
 
-            if (false) {
+            if (cachedSpecificData) {
                 return res.status(200).json({ data: JSON.parse(cachedSpecificData) })
             } else {
                 console.log("entra aqui")
