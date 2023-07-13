@@ -79,7 +79,7 @@ router.delete('/delete', isAuthenticated(['ADMIN']), async (req: Request, res: R
 
         if (request === 0) return next(ErrorResponse.invalidDelete())
 
-        return res.status(201).json({ data: req.t("row_deleted") })
+        return res.status(200).json({ data: req.t("row_deleted") })
     } catch (error: any) {
         return next(ErrorResponse.badRequest(error))
     }
